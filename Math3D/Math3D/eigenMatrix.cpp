@@ -6,12 +6,54 @@
 */
 
 using namespace std;
+using namespace xuexue;
 
 #define MATRIX_SIZE 50
 
 //熟悉一下Eigen库的类型
 int main()
 {
+
+    cout << "*************************** 验证EulerAngles ***************************" << endl;
+    //这是没有没有没有旋转位移，处于原点的东西，缩放为1
+    cv::Mat mat_4x4 = (cv::Mat_<double>(4, 4) <<
+                       1.00000, 0.00000, 0.00000, 0.00000,
+                       0.00000,	1.00000, 0.00000, 0.00000,
+                       0.00000,	0.00000, 1.00000, 0.00000,
+                       0.00000,	0.00000, 0.00000, 1.00000 );
+    //但是它的旋转矩阵应该为
+    cv::Mat mat_r_33 = (cv::Mat_<double>(3, 3) <<
+                        0, 0, 0,
+                        0, 0, 0,
+                        0, 0, 0);
+
+    mat_r_33 = Math3D::eulerAnglesToRotationMatrix(cv::Vec3f(M_PI / 2, M_PI / 3, M_PI / 4));
+    cout << mat_r_33 << endl;
+
+    Eigen::EulerAngles < double, Eigen::EulerSystem < Eigen::EULER_Z, Eigen::EULER_Y, Eigen::EULER_X >> euler(M_PI / 4, M_PI / 3, M_PI / 2);
+    Eigen::EulerAnglesZYXd euler2(M_PI / 4, M_PI / 3, M_PI / 2);//和上面写法等效
+    cout << euler.toRotationMatrix() << endl;
+    cout << euler2.toRotationMatrix() << endl;
+
+    cout << "*************************** 验证Rodrigues ***************************" << endl;
+    mat_r_33 = Math3D::eulerAnglesToRotationMatrix(cv::Vec3f(1, 0, 0));//沿x轴转1弧度
+    cv::Mat rDstv3, rDstm33;
+    cv::Rodrigues(mat_r_33, rDstv3);
+    cout << rDstv3 << endl;//这里计算结果是 [1.000000009487307;0; 0]
+
+    cv::Rodrigues(rDstv3, rDstm33);//倒回来计算一次
+    cout << rDstm33 << endl;//倒回来的计算也正确
+
+    cout << "*************************** 验证cv2eigen和四元数 ***************************" << endl;
+    Eigen::Matrix3d mat_r_e;
+    cv::cv2eigen(mat_r_33, mat_r_e);
+    cout << mat_r_33 << endl;
+    cout << mat_r_e << endl;
+
+    Eigen::Quaterniond q(mat_r_e);
+    cout << q.vec() << "," << q.w() << endl;//这个确实是1弧度的四元数
+
+
     //前三个参数为：数据类型、行、列。 声明一个2x3的float矩阵
     Eigen::Matrix<float, 2, 3> matrix_23;
 
@@ -33,8 +75,12 @@ int main()
             cout << matrix_23(i, j) << endl;
         }
     }
+    v_3d << 1;//它等于1和两个随机数
 
-    v_3d << 3, 2, 1;
+    v_3d << 3, 2, 1;//会覆盖上面的1
+
+    //v_3d << 3, 2, 1, 0, 3, 2, 1, 0;//这样写是错误的编译不会报错
+
     // 矩阵和向量相乘（实际上仍是矩阵和矩阵）
     // 但是在这里你不能混合两种不同类型的矩阵，像这样是错的
     //Eigen::Matrix<double, 2, 1> result_wrong_type = matrix_23 * v_3d;//float和double类型
