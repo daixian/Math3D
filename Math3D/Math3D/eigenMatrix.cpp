@@ -53,6 +53,15 @@ int main()
     Eigen::Quaterniond q(mat_r_e);
     cout << q.vec() << "," << q.w() << endl;//这个确实是1弧度的四元数
 
+    cout << "*************************** 标定出来的旋转 ***************************" << endl;
+    cv::FileStorage fs("extrinsics.yml", cv::FileStorage::READ);
+    cv::Mat R;
+    Eigen::Matrix3d R_e;
+    fs["R"] >> R;
+    cv::cv2eigen(R, R_e);
+    Eigen::EulerAnglesYXZd eulerR(R_e);//untiy是ZXY，YXZ
+    cout << eulerR.angles() * 57.3 << endl;//弧度转角度
+    fs.release();
 
     //前三个参数为：数据类型、行、列。 声明一个2x3的float矩阵
     Eigen::Matrix<float, 2, 3> matrix_23;

@@ -135,13 +135,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 17158619}
-  m_LocalRotation: {x: 0.009179073, y: 0.017217403, z: 0.026019696, w: 0.99947095}
-  m_LocalPosition: {x: 0, y: -0.24, z: 0}
+  m_LocalRotation: {x: 0.0087828385, y: 0.0042485083, z: 0.013050887, w: 0.99986726}
+  m_LocalPosition: {x: 0.01, y: -0.24, z: 0.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2001859907}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 1, y: 2, z: 3}
+  m_LocalEulerAnglesHint: {x: 1, y: 0.5, z: 1.5}
 --- !u!20 &17158623
 Camera:
   m_ObjectHideFlags: 0
@@ -168,8 +168,8 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: eb3d66009112d6641abb3c15d130f4f1, type: 2}
-  m_TargetDisplay: 0
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 2
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -297,6 +297,10 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bd9db51cc642aaf45b740c31da43fd2d, type: 3}
   m_IsPrefabParent: 0
+--- !u!4 &200228484 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 400000, guid: bd9db51cc642aaf45b740c31da43fd2d, type: 3}
+  m_PrefabInternal: {fileID: 200228483}
 --- !u!1 &282840810
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,8 +341,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.01
+  far clip plane: 100
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -364,7 +368,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 282840810}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -425,8 +429,8 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 180c3254d6358f54e9c6da4ec0c78f14, type: 2}
-  m_TargetDisplay: 0
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -477,4 +481,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52694f7cf811cac4887baa943d2e340d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  board: {fileID: 0}
+  board: {fileID: 200228484}
+  cam1: {fileID: 1990776868}
+  cam2: {fileID: 17158623}
+  texture1: {fileID: 0}
+  texture2: {fileID: 0}
+  count: 0
