@@ -10,12 +10,20 @@ using namespace xuexue;
 
 #define MATRIX_SIZE 50
 
+struct TestSTruct
+{
+    Eigen::Vector3f a;
+    Eigen::Vector3f b;
+    Eigen::Vector3f c;
+};
+
 //熟悉一下Eigen库的类型
 int main()
 {
+    TestSTruct tes;
 
     cout << "*************************** 验证EulerAngles ***************************" << endl;
-    //这是没有没有没有旋转位移，处于原点的东西，缩放为1
+    //这是没有旋转位移，处于原点的东西，缩放为1
     cv::Mat mat_4x4 = (cv::Mat_<double>(4, 4) <<
                        1.00000, 0.00000, 0.00000, 0.00000,
                        0.00000,	1.00000, 0.00000, 0.00000,

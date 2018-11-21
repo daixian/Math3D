@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -75,8 +75,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\SDK\opencv\opencv3\opencv-341-build-x64-vs2015\install\include;D:\SDK\eigen\eigen;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\SDK\opencv\opencv3\opencv-341-build-x64-vs2015\install\x64\vc14\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\SDK\opencv\opencv3\opencv-341-build-x64-vs2017\install\include;D:\SDK\eigen\eigen;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\SDK\opencv\opencv3\opencv-341-build-x64-vs2017\install\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
