@@ -1,4 +1,5 @@
 #include <iostream>
+#include "./Math/Math.hpp"
 
 int main(int, char **)
 {
@@ -7,6 +8,9 @@ int main(int, char **)
     {
         std::cout << i << std::endl;
     }
+    
+    Math m;
+    std::cout << m.getValue();//改变颜色
 
     std::cout << "Hello, world!\n";
 }
