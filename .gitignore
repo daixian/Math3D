@@ -336,3 +336,4 @@ Simulation/Temp/
 Simulation/SimImage/
 
 Simulation/Assembly-CSharp\.csproj
+/VSCodeCpp/build
