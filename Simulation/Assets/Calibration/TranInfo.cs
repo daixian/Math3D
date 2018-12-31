@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 调试为了得到一个transform的4x4矩阵
+/// </summary>
 public class TranInfo : MonoBehaviour
 {
 

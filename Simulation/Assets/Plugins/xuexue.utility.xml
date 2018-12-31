@@ -1,0 +1,523 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>xuexue.utility</name>
+    </assembly>
+    <members>
+        <member name="T:xuexue.crypto.Crypto">
+            <summary>
+            加密解密
+            </summary>
+        </member>
+        <member name="F:xuexue.crypto.Crypto._IV">
+            <summary>
+            默认密钥向量
+            </summary>
+        </member>
+        <member name="M:xuexue.crypto.Crypto.AESEncrypt(System.IO.Stream,System.Int64,System.IO.Stream,System.Byte[],System.Int32)">
+            <summary>
+            AES加密，传入一个文件流（从当前流位置开始工作），和之后要读取的流长度去阻塞的生成加密流。密钥长度为16字节
+            产生的输出流是：一个int的原始文件长度 + 加密流。
+            </summary>
+            <param name="inStream">输入流</param>
+            <param name="length">从输入流里读取的长度</param>
+            <param name="outStream">输出结果流</param>
+            <param name="key">密钥（16字节）</param>
+            <param name="blockLen">(Optional)加密时的块长度</param>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.crypto.Crypto.AESDecrypt(System.IO.Stream,System.IO.Stream,System.Byte[],System.Int32)">
+            <summary>
+            AES解密，将AESEncrypt的结果作为输入传入，输出一个解密后的流。.
+            </summary>
+            <param name="inStream">  加密过的整个流. </param>
+            <param name="outStream"> 输出解密结果流. </param>
+            <param name="key">       密钥. </param>
+            <param name="blockLen">  (Optional)解密时的块长度</param>
+            <returns> An int. </returns>
+        </member>
+        <member name="T:xuexue.crypto.CryptoFile">
+            <summary>
+            加密文件定义，增加一个文件头一个md5文本一个info
+            </summary>
+        </member>
+        <member name="F:xuexue.crypto.CryptoFile.filePath">
+            <summary>
+            一个已经加密的文件路径
+            </summary>
+        </member>
+        <member name="F:xuexue.crypto.CryptoFile.isCryptoFile">
+            <summary>
+            是否成功的被识别为加密文件
+            </summary>
+        </member>
+        <member name="F:xuexue.crypto.CryptoFile.header">
+            <summary>
+            加密文件头
+            </summary>
+        </member>
+        <member name="F:xuexue.crypto.CryptoFile.md5">
+            <summary>
+            原始文件的md5值
+            </summary>
+        </member>
+        <member name="F:xuexue.crypto.CryptoFile.info">
+            <summary>
+            一些可以被记录的其他附加信息
+            </summary>
+        </member>
+        <member name="F:xuexue.crypto.CryptoFile.enStream">
+            <summary>
+            加密文件的流，这个流从0位置到开始都是加密文件数据，包括前面的info信息。
+            </summary>
+        </member>
+        <member name="F:xuexue.crypto.CryptoFile.deStream">
+            <summary>
+            解密流，原始数据流（这个流从0位置开始都是有效的原始数据）
+            </summary>
+        </member>
+        <member name="M:xuexue.crypto.CryptoFile.Decrypt(System.IO.Stream,System.IO.Stream,System.Byte[],System.Int32)">
+            -------------------------------------------------------------------------------------------------
+             <summary> 解密一个文件流. </summary>
+            
+             <remarks> Surface, 2018/9/18. </remarks>
+            
+             <param name="enStream"> 加密文件的流，这个流从0位置到开始都是加密文件数据，包括前面的info信息. </param>
+             <param name="deStream"> 解密流，原始数据流（这个流从0位置开始都是有效的原始数据）. </param>
+             <param name="key">      The key. </param>
+             <param name="blockLen"> (Optional) 加密buffer长度. </param>
+            
+             <returns> A CryptoFile. </returns>
+            -------------------------------------------------------------------------------------------------
+        </member>
+        <member name="M:xuexue.crypto.CryptoFile.Encrypt(System.IO.Stream,System.String,System.IO.Stream,System.Byte[],System.Int32)">
+            -------------------------------------------------------------------------------------------------
+             <summary> 加密一个文件流. </summary>
+            
+             <remarks> Surface, 2018/9/18. </remarks>
+            
+             <param name="oriStream"> 原始文件流. </param>
+             <param name="info">      一些可以被记录的其他附加信息. </param>
+             <param name="enStream">  加密文件的流，这个流从0位置到开始都是加密文件数据，包括前面的info信息。. </param>
+             <param name="key">       The key. </param>
+             <param name="blockLen">  (Optional) 加密buffer长度. </param>
+            
+             <returns> A CryptoFile. </returns>
+            -------------------------------------------------------------------------------------------------
+        </member>
+        <member name="T:xuexue.file.FileItem">
+            <summary>
+            一个文件的记录项
+            </summary>
+        </member>
+        <member name="F:xuexue.file.FileItem.relativePath">
+            <summary>
+            相对路径
+            </summary>
+        </member>
+        <member name="F:xuexue.file.FileItem.id">
+            <summary>
+            这个文件可能对应了一个id
+            </summary>
+        </member>
+        <member name="F:xuexue.file.FileItem.MD5">
+            <summary>
+            这个文件的当前MD5值
+            </summary>
+        </member>
+        <member name="F:xuexue.file.FileItem.url">
+            <summary>
+            这个文件可能对应了一个下载地址
+            </summary>
+        </member>
+        <member name="F:xuexue.file.FileItem.info">
+            <summary>
+            这个文件可能有一个备注信息
+            </summary>
+        </member>
+        <member name="F:xuexue.file.FileItem.MD5Correct">
+            <summary>
+            它应该的正确的MD5，用于在下载前得到。
+            </summary>
+        </member>
+        <member name="F:xuexue.file.FileItem.tempFilePath">
+            <summary>
+            这个文件可能有一个下载了一半的临时文件(临时文件的相对路径)。
+            一般可以.temp
+            </summary>
+        </member>
+        <member name="T:xuexue.file.RootDir">
+            <summary>
+            某一个文件夹的根目录,它应该有在一直维护一个Json文件，记录着当前的文件夹状态。
+            </summary>
+        </member>
+        <member name="F:xuexue.file.RootDir.dict">
+            <summary>
+            以本地文件relativePath为key的字典，每一个本地文件路径应该不同，否则就覆盖了。
+            </summary>
+        </member>
+        <member name="F:xuexue.file.RootDir.dirPath">
+            <summary>
+            这个文件夹的根目录(绝对路径),最后结尾会带斜杠。
+            注：
+            它本来由DirectoryInfo的FullName得到,如果构造DirectoryInfo时相对路径文件夹末尾不带斜杠，则结果也不带斜杠。
+            形如"D:\\Work\\DFlie\\UnitTest\\bin\\Debug\\testDir"
+            如果构造DirectoryInfo时输入的相对路径文件夹末尾带斜杠，则结果的fullName也带有斜杠
+            </summary>
+        </member>
+        <member name="M:xuexue.file.RootDir.InitWithPath(System.String)">
+            <summary>
+            通过一个现有的文件夹统计每个文件，实际上只对所有已存在的文件，记录了一个相对路径.
+            </summary>
+            <param name="dirPath">作为整个系统的根目录文件夹</param>
+        </member>
+        <member name="M:xuexue.file.RootDir.GetFullPath(System.String)">
+            <summary>
+            输入一个相对路径,得到完整的路径,要注意输入的相对路径不应该以斜杠开头。
+            输入形式为：dir1/dir2/dir3/file.txt (正反斜杠均可)
+            </summary>
+            <param name="relativePath">相对路径</param>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.file.RootDir.AddItem(xuexue.file.FileItem)">
+            <summary>
+            向记录中添加一项FileItem记录,如果已经重复那么返回false;
+            </summary>
+            <param name="fi">FileItem记录</param>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.file.RootDir.GetItemWithID(System.Int32)">
+            <summary>
+            通常这些资源文件都是带有分配id的,那么通过一个id去查询一项纪录是否存在。
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.file.RootDir.GetItemWithRP(System.String)">
+            <summary>
+            通过相对路径来得到一项
+            </summary>
+            <param name="relativePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.file.RootDir.CalcMD5">
+            <summary>
+            计算MD5
+            </summary>
+        </member>
+        <member name="M:xuexue.file.RootDir.CalcMD5(System.Action{xuexue.file.RootDir,xuexue.file.FileItem,System.Int32})">
+            <summary>
+            异步计算MD5
+            </summary>
+        </member>
+        <member name="M:xuexue.file.FileHelper.GetFiles(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+            从一个文件夹里得到所有符合正则筛选条件的文件,返回这些文件的完整路径,如果文件夹不存在那么会返回null.
+            例如：检索某种后缀名(同时.manifest和.txt)的正则可以这样写@"\.manifest$|\.txt$"
+            </summary>
+            <param name="dir">文件夹</param>
+            <param name="regex">文件名相关的正则</param>
+            <param name="searchOption">.net库中的检索设置</param>
+            <returns>符合条件的文件结果列表</returns>
+        </member>
+        <member name="M:xuexue.file.FileHelper.GetFilesExcept(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+            从一个文件夹里得到所有不符合正则筛选条件的文件,返回这些文件的完整路径,如果文件夹不存在那么会返回null.
+            例如：排除某种后缀名(同时.manifest和.txt)的正则可以这样写@"\.manifest$|\.txt$"
+            </summary>
+            <param name="dir">文件夹</param>
+            <param name="regex">文件名相关的正则</param>
+            <param name="searchOption">.net库中的检索设置</param>
+            <returns>符合条件的文件结果列表</returns>
+        </member>
+        <member name="M:xuexue.file.FileHelper.CleanDirectory(System.String)">
+            <summary>
+            清空文件夹
+            </summary>
+            <param name="dir">文件夹路径</param>
+        </member>
+        <member name="M:xuexue.file.FileHelper.IsEmpty(System.IO.DirectoryInfo)">
+            <summary>
+            判断一个文件夹是否已经完全空了.如果这个文件夹不存在，那么也直接返回了一个ture.
+            </summary>
+            <param name="dir"></param>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.file.FileHelper.IsNoFile(System.IO.DirectoryInfo)">
+            <summary>
+            是否已经没有文件了
+            </summary>
+            <param name="dir"></param>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.file.FileHelper.CopyTo(System.String,System.String)">
+            <summary>
+            拷贝一个文件夹里的所有文件到另一个文件夹，会覆盖目标文件夹里的文件
+            </summary>
+            <param name="srcDir"></param>
+            <param name="targetDir"></param>
+            <returns>实际Copy的文件数</returns>
+        </member>
+        <member name="M:xuexue.file.FileHelper.CopyTo(System.String,System.String,System.String)">
+            <summary>
+            拷贝文件夹，将MD5值不同的文件进行backup，放置到backupDir的目录下
+            </summary>
+            <param name="srcDir"></param>
+            <param name="targetDir"></param>
+            <param name="backupDir"></param>
+            <returns>实际Copy的文件数</returns>
+        </member>
+        <member name="M:xuexue.file.FileHelper.CopyTo(System.IO.DirectoryInfo,System.String)">
+            <summary>
+            拷贝一个文件夹里的所有文件到另一个文件夹，会覆盖目标文件夹里的文件
+            </summary>
+            <param name="srcDir"></param>
+            <param name="targetDir"></param>
+            <returns>实际Copy的文件数</returns>
+        </member>
+        <member name="M:xuexue.file.FileHelper.CopyTo(System.IO.DirectoryInfo,System.String,System.String)">
+            <summary>
+            拷贝文件夹，将MD5值不同的文件进行backup，放置到backupDir的目录下
+            </summary>
+            <param name="srcDir"></param>
+            <param name="targetDir"></param>
+            <param name="backupDir"></param>
+            <returns>实际Copy的文件数</returns>
+        </member>
+        <member name="M:xuexue.file.FileHelper.MoveMergeTo(System.IO.DirectoryInfo,System.String)">
+            <summary>
+            原版的MoveTo诸多限制，这个函数是一个更强大的move。包含了自动和原来的文件夹合并策略。
+            </summary>
+            <param name="srcDir"></param>
+            <param name="targetDir"></param>
+        </member>
+        <member name="M:xuexue.file.FileHelper.Relative(System.String,System.String)">
+            <summary>
+            求相对路径,需要rootPath确实是childPath的父级.返回结果一律使用"/",相对路径第一个字符不含"/".
+            </summary>
+            <param name="childPath">子级目录</param>
+            <param name="rootPath">父级目录</param>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.file.FileHelper.CreateParentDir(System.IO.FileInfo)">
+            <summary>
+            创建它的父文件夹
+            </summary>
+            <param name="fi"></param>
+            <returns>进行了创建返回true，不需要创建返回false</returns>
+        </member>
+        <member name="M:xuexue.file.FileHelper.CheckCreateParentDir(System.String)">
+            <summary>
+            检查并且创建文件夹
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:xuexue.file.MD5Helper.MD5(System.IO.Stream)">
+            <summary>
+            计算一个流的md5，不能设置起始和结束,从起始计算到结束
+            </summary>
+            <param name="stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.file.MD5Helper.FileMD5(System.String)">
+            <summary>
+            计算一个文件的MD5,返回文本值。
+            </summary>
+            <param name="filePath">文件路径</param>
+            <returns>MD5的文本值</returns>
+        </member>
+        <member name="M:xuexue.file.MD5Helper.Compare(System.String,System.String,System.Int64)">
+            <summary>
+            由一个文件比对MD5值是否正确
+            </summary>
+            <param name="filePath">文件路径</param>
+            <param name="oriMD5">正确的MD5</param>
+            <param name="oriFileSize">正确的文件大小</param>
+            <returns>是否正确</returns>
+        </member>
+        <member name="T:xuexue.file.Log">
+            <summary>
+            这个模块的日志对外接口,添加对应log事件即可对外输出日志。
+            </summary>
+        </member>
+        <member name="T:xuexue.LitJson.IIntermediary">
+            <summary>
+            要转化的对象类型和json之间的中间媒介类。这个类应该有一个无参构造
+            </summary>
+        </member>
+        <member name="M:xuexue.LitJson.IIntermediary.InitWithTarget(System.Object)">
+            <summary>
+            传入一个目标对象，填充自己的值。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.LitJson.IIntermediary.ToTarget">
+            <summary>
+            此时这个媒介类对象已经有值，构造到一个目标对象。
+            </summary>
+            <returns>构造到一个目标对象</returns>
+        </member>
+        <member name="M:xuexue.LitJson.IIntermediary.OverrideTarget(System.Object)">
+            <summary>
+            重写一个已有的对象。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:xuexue.LitJson.xuexueJsonClass">
+            <summary>
+            一个有爱且好用的LitJson扩展类。
+            这是一个Json行为的策略配置，可以标记在类的上面，也注册到到一个字典中。
+            没有写的话就是默认配置，和写了一个属性注解之后，没有专门设置其中字段的效果是一样的。
+            * 默认反射字段
+            * 默认不反射属性
+            </summary>
+        </member>
+        <member name="M:xuexue.LitJson.xuexueJsonClass.#ctor">
+            <summary>
+            默认构造
+            </summary>
+        </member>
+        <member name="M:xuexue.LitJson.xuexueJsonClass.#ctor(System.String[])">
+            <summary>
+            使用使能的成员名来构造
+            </summary>
+            <param name="enableMembers"></param>
+        </member>
+        <member name="F:xuexue.LitJson.xuexueJsonClass.defaultFieldConstraint">
+            <summary>
+            默认是否反射字段(默认是true)
+            </summary>
+        </member>
+        <member name="F:xuexue.LitJson.xuexueJsonClass.defaultPropertyConstraint">
+            <summary>
+             默认是否反射属性(默认是false)
+            </summary>
+        </member>
+        <member name="F:xuexue.LitJson.xuexueJsonClass.fieldflags">
+            <summary>
+            字段的反射Flags
+            </summary>
+        </member>
+        <member name="F:xuexue.LitJson.xuexueJsonClass.propertyflags">
+            <summary>
+            属性的反射Flags
+            </summary>
+        </member>
+        <member name="F:xuexue.LitJson.xuexueJsonClass.enableMembers">
+            <summary>
+            特别要使能的成员（成员名），如果它不为null,那么只有这个数组中的成员被使能
+            </summary>
+        </member>
+        <member name="F:xuexue.LitJson.xuexueJsonClass.ignoreMembers">
+            <summary>
+            特别要忽略的成员（成员名），如果它不为null,那么这个数组中的成员一定被忽略
+            </summary>
+        </member>
+        <member name="T:xuexue.LitJson.xuexueJson">
+            <summary>
+            经过xuexueJsonClass的配置策略筛选出来之后，只有带这个xuexueJson的字段和属性才会被生效。
+            条件优先级 enableMembers > ignoreMembers > xuexueJson > xuexueJsonIgnore > defaultMemberConstraint
+            </summary>
+        </member>
+        <member name="F:xuexue.LitJson.xuexueJson.priority">
+            <summary>
+            这个成员的优先级，默认是0，优先级越小越靠前。
+            </summary>
+        </member>
+        <member name="T:xuexue.LitJson.xuexueJsonIgnore">
+            <summary>
+            如果标记了xuexueJsonIgnore，那么这个成员被约束为忽略.
+            条件优先级 enableMembers > ignoreMembers > xuexueJson > xuexueJsonIgnore >defaultMemberConstraint
+            </summary>
+        </member>
+        <member name="T:xuexue.LitJson.JsonTypeRegister">
+            <summary>
+            注册类的配置类型
+            </summary>
+        </member>
+        <member name="F:xuexue.LitJson.JsonTypeRegister.dictTypeXXJC">
+            <summary>
+            配置字典
+            </summary>
+        </member>
+        <member name="F:xuexue.LitJson.JsonTypeRegister.listIgnoreClass">
+            <summary>
+            要忽略的类的列表
+            </summary>
+        </member>
+        <member name="F:xuexue.LitJson.JsonTypeRegister.defaultClassAttribute">
+            <summary>
+            当前默认使用的类Attribute，不可以将它置为null，可以修改里面的内容。但是要保证序列化和反序列化的时候此处配置一致。即整个项目设置一致。
+            </summary>
+        </member>
+        <member name="M:xuexue.LitJson.JsonTypeRegister.BindType(System.Type,xuexue.LitJson.xuexueJsonClass)">
+            <summary>
+            给一个类型绑定一个Json设置
+            </summary>
+            <param name="type"></param>
+            <param name="xxjc"></param>
+        </member>
+        <member name="M:xuexue.LitJson.JsonTypeRegister.AddIgnoreClass(System.Type)">
+            <summary>
+            添加一个要忽略的类型
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="T:xuexue.LitJson.xuexueJsonTest">
+            <summary>
+            一个有爱的Json扩展类。写了一大半，发现了另外一条路= =!
+            </summary>
+        </member>
+        <member name="M:xuexue.LitJson.xuexueJsonTest.RegisterType">
+            <summary>
+            注册float
+            </summary>
+        </member>
+        <member name="M:xuexue.LitJson.xuexueJsonTest.ToJson(System.Object)">
+            <summary>
+            obj->Json
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.LitJson.xuexueJsonTest.ToObject``1(System.String)">
+            <summary>
+            Json->obj
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:xuexue.LitJson.JsonData.ContainsKey(System.String)">
+            <summary>
+            Determines whether the json contains an element that has the specified key.
+            </summary>
+            <param name="key">The key to locate in the json.</param>
+            <returns>true if the json contains an element that has the specified key; otherwise, false.</returns>
+        </member>
+        <member name="M:xuexue.LitJson.JsonMapper.OverrideObject(System.String,System.Object)">
+            <summary>
+            覆盖重写一个已经实例化出来的对象中的值。只有引用类型才进来有作用。所以这个参数限定了只能进来引用参数。
+            值类型的参数就直接使用ToObject()赋值好了。另外这个函数只对单个对象有用，对Array等不该使用这个函数
+            </summary>
+            <param name="json"></param>
+            <param name="obj"></param>
+        </member>
+        <member name="M:xuexue.LitJson.JsonMapper.OverrideObject(System.IO.TextReader,System.Object)">
+            <summary>
+            覆盖重写一个已经实例化出来的对象中的值。只有引用类型才进来有作用。所以这个参数限定了只能进来引用参数。
+            值类型的参数就直接使用ToObject()赋值好了。另外这个函数只对单个对象有用，对Array等不该使用这个函数
+            </summary>
+            <param name="reader"></param>
+            <param name="obj"></param>
+        </member>
+        <member name="M:xuexue.LitJson.JsonMapper.OverrideObject(xuexue.LitJson.JsonReader,System.Object)">
+            <summary>
+            覆盖重写一个已经实例化出来的对象中的值。只有引用类型才进来有作用。所以这个参数限定了只能进来引用参数。
+            值类型的参数就直接使用ToObject()赋值好了。另外这个函数只对单个对象有用，对Array等不该使用这个函数
+            </summary>
+            <param name="reader"></param>
+            <param name="obj"></param>
+        </member>
+    </members>
+</doc>
