@@ -2,18 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using xuexue.LitJson;
 
 namespace dxlib
 {
+    /// <summary>
+    /// 场景里的一个cvObject
+    /// </summary>
+    [xuexueJsonClass]
+    public class CvObject
+    {
+        /// <summary> 物体名字. </summary>
+        public string name;
+
+        /// <summary> 物体类型. </summary>
+        public int type = 0;
+
+        /// <summary> 世界坐标. </summary>
+        public double[] position;
+
+        /// <summary> 旋转. </summary>
+        public double[] rotation;
+    }
+
     /// <summary>
     /// 得到一个cv的场景
     /// </summary>
     [xuexueJsonClass]
     public class CvScene
     {
-
-
+        public CvObject[] vGameObj;
     }
 }
