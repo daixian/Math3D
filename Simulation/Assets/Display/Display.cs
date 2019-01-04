@@ -25,19 +25,37 @@ namespace dxlib
         /// </summary>
         private List<GameObject> _listObj = new List<GameObject>();
 
-        private void Awake()
+        /// <summary>
+        /// 载入所需要的资源
+        /// </summary>
+        private void LoadResources()
         {
             lineType = new Material[] { Resources.Load<Material>("red"),
                                         Resources.Load<Material>("green"),
                                         Resources.Load<Material>("blue"),
                                         Resources.Load<Material>("white") };
+            //载入所有的cvObj预制体
+            List<GameObject> listObj = new List<GameObject>();
+            for (int i = 0; i < 1000; i++)
+            {
+                GameObject obj = Resources.Load<GameObject>("CvObj" + i);//载入所有命名为CvObj的预制体
+                if (obj != null)
+                    listObj.Add(obj);
+                else
+                    break;
+            }
+            prefab = listObj.ToArray();
+        }
+
+
+        void Awake()
+        {
+            LoadResources();
         }
 
         // Use this for initialization
         void Start()
         {
-
-
 
             LoadFile("");
         }
@@ -48,7 +66,7 @@ namespace dxlib
 
         }
 
-        #region 载入场景
+        #region 载入json场景
 
         /// <summary>
         /// 载入一个json场景文件
