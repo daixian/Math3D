@@ -75,7 +75,7 @@ namespace dxlib
         private void LoadFile(string path)
         {
             Clear();
-            string str = File.ReadAllText(@"D:\Work\MRSystem\x64\Release\0GC100GuessWorldCenter_step0.json");
+            string str = File.ReadAllText(@"D:\Work\MRSystem\x64\Release\1CharucoStereoCheck.json");
             CvScene scene = xuexue.LitJson.JsonMapper.ToObject<CvScene>(str);
             for (int i = 0; i < scene.vGameObj.Length; i++)
             {
