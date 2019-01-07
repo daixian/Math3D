@@ -13,12 +13,12 @@ namespace dxlib
         /// <summary>
         /// 支持的物体type类型
         /// </summary>
-        public GameObject[] prefab;
+        private GameObject[] prefab = new GameObject[1000];
 
         /// <summary>
         /// 根据不同的线类型来画不同颜色的线
         /// </summary>
-        public Material[] lineType;
+        private Material[] lineType;
 
         /// <summary>
         /// 所有物体的列表
@@ -33,18 +33,24 @@ namespace dxlib
             lineType = new Material[] { Resources.Load<Material>("red"),
                                         Resources.Load<Material>("green"),
                                         Resources.Load<Material>("blue"),
-                                        Resources.Load<Material>("white") };
-            //载入所有的cvObj预制体
-            List<GameObject> listObj = new List<GameObject>();
+                                        Resources.Load<Material>("white"),
+                                        Resources.Load<Material>("cyan"),
+                                        Resources.Load<Material>("lightPink"),
+                                        Resources.Load<Material>("orange")
+            };
+            //载入所有的cvObj预制体  ,支持1000个           
+            int baseIndex = 0;
             for (int i = 0; i < 1000; i++)
             {
                 GameObject obj = Resources.Load<GameObject>("CvObj" + i);//载入所有命名为CvObj的预制体
                 if (obj != null)
-                    listObj.Add(obj);
+                    prefab[i] = obj;
                 else
-                    break;
+                {
+                    baseIndex += 100;//提升100到下一种资源物体
+                    i = baseIndex - 1;//这里要减一因为i马上要自增1
+                }
             }
-            prefab = listObj.ToArray();
         }
 
 
@@ -75,7 +81,7 @@ namespace dxlib
         private void LoadFile(string path)
         {
             Clear();
-            string str = File.ReadAllText(@"D:\Work\MRSystem\x64\Release\1CharucoStereoCheck.json");
+            string str = File.ReadAllText(@"D:\Work\MRSystem\x64\Release\images\calib\origin\F3D0003\stereoCalib.json");
             CvScene scene = xuexue.LitJson.JsonMapper.ToObject<CvScene>(str);
             for (int i = 0; i < scene.vGameObj.Length; i++)
             {
@@ -92,13 +98,31 @@ namespace dxlib
         /// 添加一个cv物体到场景里
         /// </summary>
         /// <param name="co"></param>
-        private void AddCvObj(CvObject co)
+        private void AddCvObj(CvObject co, GameObject parent = null)
         {
-            GameObject pref = prefab[co.type];
             Vector3 pos = new Vector3((float)co.position[0], (float)co.position[1], (float)co.position[2]);
             Quaternion rot = new Quaternion((float)co.rotation[0], (float)co.rotation[1], (float)co.rotation[2], (float)co.rotation[3]);
-            GameObject go = GameObject.Instantiate(pref, pos, rot);
+
+            GameObject go;
+            if (co.type >= 0)//type=-1则为空物体
+            {
+                GameObject pref = prefab[co.type];
+                go = GameObject.Instantiate(pref, pos, rot);
+            }
+            else
+            {
+                go = new GameObject();
+                go.transform.position = pos;
+                go.transform.rotation = rot;
+            }
+
             go.name = co.name;
+            if (parent != null)
+                go.transform.parent = parent.transform;
+            for (int i = 0; i < co.children.Length; i++)
+            {
+                AddCvObj(co.children[i], go);//递归一下
+            }
             _listObj.Add(go);//记录这个添加的物体
         }
 

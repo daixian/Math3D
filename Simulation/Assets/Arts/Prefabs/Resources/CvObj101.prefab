@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23306791135895914}
   - component: {fileID: 135601346267556718}
   m_Layer: 0
-  m_Name: CvObj5
+  m_Name: CvObj101
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

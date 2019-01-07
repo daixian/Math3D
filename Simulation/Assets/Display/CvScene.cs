@@ -23,6 +23,9 @@ namespace dxlib
 
         /// <summary> 旋转. </summary>
         public double[] rotation;
+
+        /// <summary> 这个物体的子物体. </summary>
+        public CvObject[] children;
     }
 
     /// <summary>
