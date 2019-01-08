@@ -18,7 +18,7 @@ namespace dxlib
         /// 构造
         /// </summary>
         public Config()
-        {  
+        {
         }
 
         /// <summary>
@@ -35,6 +35,19 @@ namespace dxlib
         {
             get { return _instance; }
         }
+        #region 字段
+
+        /// <summary>
+        /// 历史文件列表(路径),直接暴露出来用，注意线程安全
+        /// </summary>
+        private List<string> listJsonSceneHistory = new List<string>();
+
+        /// <summary>
+        /// 最后一次加载的文件路径
+        /// </summary>
+        public string lastJsonScene;
+
+        #endregion
 
         #region 载入保存配置文件
 
@@ -62,10 +75,7 @@ namespace dxlib
 
         #endregion
 
-        /// <summary>
-        /// 历史文件列表,直接暴露出来用，注意线程安全
-        /// </summary>
-        List<string> listHistoryFile = new List<string>();
+        #region 添加历史记录
 
         /// <summary>
         /// 只有文件路径不同的时候才加入这个历史记录
@@ -74,14 +84,16 @@ namespace dxlib
         public void AddHistory(string filePath)
         {
             FileInfo fi = new FileInfo(filePath);
-            if (!listHistoryFile.Contains(fi.FullName))//只有路径不一样了才记录
+            if (!listJsonSceneHistory.Contains(fi.FullName))//只有路径不一样了才记录
             {
-                listHistoryFile.Add(filePath);
-                if (listHistoryFile.Count > 10)
+                listJsonSceneHistory.Add(filePath);
+                if (listJsonSceneHistory.Count > 10)
                 {
-                    listHistoryFile.RemoveAt(0);
+                    listJsonSceneHistory.RemoveAt(0);
                 }
             }
+
+            lastJsonScene = fi.FullName;//记录最后一次的文件
         }
 
         /// <summary>
@@ -90,7 +102,10 @@ namespace dxlib
         /// <returns></returns>
         public string[] GetHistory()
         {
-            return listHistoryFile.ToArray();
+            return listJsonSceneHistory.ToArray();
         }
+
+        #endregion
+
     }
 }

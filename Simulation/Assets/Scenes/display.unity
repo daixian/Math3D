@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a83da5d54c4035943ad7c964f051d242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonPath: D:\Work\MRSystem\x64\Release\images\calib\origin\F3D0003\stereoCalib.json
+  jsonPath: D:\Work\MRSystem\x64\Release\images_pad\calib\origin\F3D0003\stereoCalib.json
 --- !u!4 &961043832
 Transform:
   m_ObjectHideFlags: 0

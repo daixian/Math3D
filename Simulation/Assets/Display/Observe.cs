@@ -68,6 +68,10 @@ namespace dxlib
         // Use this for initialization
         void Start()
         {
+            if (!string.IsNullOrEmpty(Config.Inst.lastJsonScene))
+            {
+                jsonPath = Config.Inst.lastJsonScene;
+            }
             LoadFile(jsonPath);
         }
 
