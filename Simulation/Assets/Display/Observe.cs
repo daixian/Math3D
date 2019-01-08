@@ -97,7 +97,7 @@ namespace dxlib
         {
             if (!File.Exists(path))
             {
-                return;
+                return;//如果文件不存在就直接返回
             }
 
             Config.Inst.AddHistory(path);
@@ -120,6 +120,7 @@ namespace dxlib
         /// 添加一个cv物体到场景里
         /// </summary>
         /// <param name="co"></param>
+        /// <param name="parent"></param>
         private void AddCvObj(CvObject co, GameObject parent = null)
         {
             Vector3 pos = new Vector3((float)co.position[0], (float)co.position[1], (float)co.position[2]);

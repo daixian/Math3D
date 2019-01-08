@@ -29,7 +29,7 @@ namespace dxlib
     }
 
     /// <summary>
-    /// 场景里的一个cvObject
+    /// 场景里的一个cvLine
     /// </summary>
     [xuexueJsonClass]
     public class CvLine
