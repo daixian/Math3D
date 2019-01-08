@@ -25,7 +25,7 @@ namespace dxlib
         /// 单例
         /// </summary>
         [xuexueJsonIgnore]
-        public static Config _instance = new Config();
+        private static Config _instance = new Config();
 
         /// <summary>
         /// 单例
@@ -35,6 +35,7 @@ namespace dxlib
         {
             get { return _instance; }
         }
+
         #region 字段
 
         /// <summary>
