@@ -337,3 +337,4 @@ Simulation/SimImage/
 
 Simulation/Assembly-CSharp\.csproj
 /VSCodeCpp/build
+/Simulation/config.json

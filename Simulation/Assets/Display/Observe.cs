@@ -8,8 +8,13 @@ namespace dxlib
     /// <summary>
     /// 读ocv产生的json场景文件，显示对应的场景结果
     /// </summary>
-    public class Display : MonoBehaviour
+    public class Observe : MonoBehaviour
     {
+        /// <summary>
+        /// json场景文件路径
+        /// </summary>
+        public string jsonPath = @"D:\Work\MRSystem\x64\Release\images\calib\origin\F3D0003\stereoCalib.json";
+
         /// <summary>
         /// 支持的物体type类型
         /// </summary>
@@ -56,14 +61,14 @@ namespace dxlib
 
         void Awake()
         {
+            Config.Inst.Load();
             LoadResources();
         }
 
         // Use this for initialization
         void Start()
         {
-
-            LoadFile("");
+            LoadFile(jsonPath);
         }
 
         // Update is called once per frame
@@ -72,16 +77,24 @@ namespace dxlib
 
         }
 
+        void OnApplicationQuit()
+        {
+            Config.Inst.Save();
+        }
+
+
         #region 载入json场景
 
         /// <summary>
         /// 载入一个json场景文件
         /// </summary>
         /// <param name="path"></param>
-        private void LoadFile(string path)
+        public void LoadFile(string path)
         {
+            Config.Inst.AddHistory(path);
+
             Clear();
-            string str = File.ReadAllText(@"D:\Work\MRSystem\x64\Release\images\calib\origin\F3D0003\stereoCalib.json");
+            string str = File.ReadAllText(path);
             CvScene scene = xuexue.LitJson.JsonMapper.ToObject<CvScene>(str);
             for (int i = 0; i < scene.vGameObj.Length; i++)
             {
@@ -107,6 +120,10 @@ namespace dxlib
             if (co.type >= 0)//type=-1则为空物体
             {
                 GameObject pref = prefab[co.type];
+                if (pref == null)//如果支持资源里面没有这个物体
+                {
+                    pref = prefab[(co.type / 100) * 100];//那么就使用这个类型物体的起始类型
+                }
                 go = GameObject.Instantiate(pref, pos, rot);
             }
             else
@@ -119,10 +136,14 @@ namespace dxlib
             go.name = co.name;
             if (parent != null)
                 go.transform.parent = parent.transform;
-            for (int i = 0; i < co.children.Length; i++)
+            if (co.children != null)
             {
-                AddCvObj(co.children[i], go);//递归一下
+                for (int i = 0; i < co.children.Length; i++)
+                {
+                    AddCvObj(co.children[i], go);//递归一下
+                }
             }
+
             _listObj.Add(go);//记录这个添加的物体
         }
 
