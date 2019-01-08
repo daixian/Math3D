@@ -97,6 +97,7 @@ namespace dxlib
         {
             if (!File.Exists(path))
             {
+                Debug.Log("Observe.LoadFile():文件不存在. " + path);
                 return;//如果文件不存在就直接返回
             }
 
