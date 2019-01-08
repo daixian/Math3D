@@ -338,3 +338,4 @@ Simulation/SimImage/
 Simulation/Assembly-CSharp\.csproj
 /VSCodeCpp/build
 /Simulation/config.json
+/Simulation/Assembly-CSharp-Editor.csproj
