@@ -95,6 +95,11 @@ namespace dxlib
         /// <param name="path"></param>
         public void LoadFile(string path)
         {
+            if (!File.Exists(path))
+            {
+                return;
+            }
+
             Config.Inst.AddHistory(path);
 
             Clear();
