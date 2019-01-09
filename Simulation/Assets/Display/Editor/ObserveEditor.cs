@@ -15,6 +15,7 @@ namespace dxlib
             DrawDefaultInspector();
 
             dxlib.Observe myScript = (dxlib.Observe)target;
+            //在检视面板显示一个按钮
             if (GUILayout.Button("重新载入json场景"))
             {
                 myScript.LoadFile(myScript.jsonPath);
