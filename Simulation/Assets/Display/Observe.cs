@@ -13,7 +13,7 @@ namespace dxlib
         /// <summary>
         /// json场景文件路径
         /// </summary>
-        public string jsonPath = @"D:\Work\MRSystem\x64\Release\images\calib\origin\F3D0003\stereoCalib.json";
+        public string jsonPath = @"../omake/stereoCalib.json";
 
         /// <summary>
         /// 支持的物体type类型
@@ -58,7 +58,6 @@ namespace dxlib
             }
         }
 
-
         void Awake()
         {
             Config.Inst.Load();
@@ -85,7 +84,6 @@ namespace dxlib
         {
             Config.Inst.Save();
         }
-
 
         #region 载入json场景
 
