@@ -24,6 +24,9 @@ namespace dxlib
         /// <summary> 旋转. </summary>
         public double[] rotation;
 
+        /// <summary> 本地缩放. </summary>
+        public double[] localScale;
+        
         /// <summary> 这个物体的子物体. </summary>
         public CvObject[] children;
     }

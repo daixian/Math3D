@@ -124,6 +124,7 @@ namespace dxlib
         {
             Vector3 pos = new Vector3((float)co.position[0], (float)co.position[1], (float)co.position[2]);
             Quaternion rot = new Quaternion((float)co.rotation[0], (float)co.rotation[1], (float)co.rotation[2], (float)co.rotation[3]);
+            Vector3 scale = new Vector3((float)co.localScale[0], (float)co.localScale[1], (float)co.localScale[2]);
 
             GameObject go;
             if (co.type >= 0)//type=-1则为空物体
@@ -140,6 +141,8 @@ namespace dxlib
                 go = new GameObject();
                 go.transform.position = pos;
                 go.transform.rotation = rot;
+                if (scale != Vector3.zero)//只有当缩放不为0的时候才设置(如果为0认为忽略缩放设置，使用u3d资源里的缩放)
+                    go.transform.localScale = scale;
             }
 
             go.name = co.name;
