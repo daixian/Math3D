@@ -26,9 +26,18 @@ namespace dxlib
 
         /// <summary> 本地缩放. </summary>
         public double[] localScale;
-        
+
+        /// <summary> 上面提供的坐标系是否是本地坐标. </summary>
+        public bool isLocal = false;
+
+        /// <summary> 这个物体是否在u3d里默认是显示的. </summary>
+        public bool isActive = true;
+
         /// <summary> 这个物体的子物体. </summary>
         public CvObject[] children;
+
+        /// <summary> 这个物体的子物体. </summary>
+        public CvLine[] lines;
     }
 
     /// <summary>
@@ -58,7 +67,5 @@ namespace dxlib
     public class CvScene
     {
         public CvObject[] vGameObj;
-
-        public CvLine[] vLine;
     }
 }

@@ -108,11 +108,6 @@ namespace dxlib
             {
                 this.AddCvObj(scene.vGameObj[i]);
             }
-
-            for (int i = 0; i < scene.vLine.Length; i++)
-            {
-                this.AddCvLine(scene.vLine[i]);
-            }
         }
 
         /// <summary>
@@ -134,20 +129,31 @@ namespace dxlib
                 {
                     pref = prefab[(co.type / 100) * 100];//那么就使用这个类型物体的起始类型
                 }
-                go = GameObject.Instantiate(pref, pos, rot);
+                go = GameObject.Instantiate(pref);
             }
             else
             {
                 go = new GameObject();
-                go.transform.position = pos;
-                go.transform.rotation = rot;
-                if (scale != Vector3.zero)//只有当缩放不为0的时候才设置(如果为0认为忽略缩放设置，使用u3d资源里的缩放)
-                    go.transform.localScale = scale;
             }
 
             go.name = co.name;
             if (parent != null)
                 go.transform.parent = parent.transform;
+
+            if (co.isLocal)//json里的坐标是否是本地坐标
+            {
+                go.transform.localPosition = pos;
+                go.transform.localRotation = rot;
+            }
+            else
+            {
+                go.transform.position = pos;
+                go.transform.rotation = rot;
+            }
+            if (scale != Vector3.zero)//只有当缩放不为0的时候才设置(如果为0认为忽略缩放设置，使用u3d资源里的缩放)
+                go.transform.localScale = scale;
+
+            //设置好自己的坐标之后在安排自己的子物体们
             if (co.children != null)
             {
                 for (int i = 0; i < co.children.Length; i++)
@@ -156,12 +162,22 @@ namespace dxlib
                 }
             }
 
+            if (co.lines != null)
+            {
+                for (int i = 0; i < co.lines.Length; i++)
+                {
+                    this.AddCvLine(co.lines[i], go);
+                }
+            }
+
+            go.SetActive(co.isActive);
             _listObj.Add(go);//记录这个添加的物体
         }
 
-        private void AddCvLine(CvLine cl)
+        private void AddCvLine(CvLine cl, GameObject go)
         {
             GameObject line = new GameObject(cl.name);
+            line.transform.parent = go.transform;
             LineRenderer lr = line.AddComponent<LineRenderer>();
             lr.startWidth = 0.001f;
             lr.endWidth = 0.001f;
