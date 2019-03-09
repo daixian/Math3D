@@ -61,6 +61,7 @@ namespace dxlib
         {
             Config.Inst.Load();
             LoadResources();
+            QualitySettings.vSyncCount = 4;//设置垂直同步来减少cpu占用
         }
 
         // Use this for initialization
