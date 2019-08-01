@@ -13,23 +13,27 @@ int main()
     //使用一个
     cv::Ptr<cv::ShapeContextDistanceExtractor> mysc = cv::createShapeContextDistanceExtractor();
 
-    vector<cv::Point> contQuery;
-    for (size_t i = 0; i < 2; i++) {
+    vector<cv::Point2f> contQuery;
+    for (size_t i = 0; i < 4; i++) {
         contQuery.push_back({0, 0});
-        contQuery.push_back({6, 0});
-        contQuery.push_back({6, -2});
-        contQuery.push_back({-6, -2});
-        contQuery.push_back({-6, 0});
+        contQuery.push_back({8, 0});
+        contQuery.push_back({0, 16});
+        contQuery.push_back({0, 0});
     }
-    vector<cv::Point> conti;
-    for (size_t i = 0; i < 2; i++) {
-        conti.push_back({0, 0});
-        conti.push_back({6, 1});
-        conti.push_back({6, -2});
-        conti.push_back({-6, -2});
-        conti.push_back({-6, 0});
+    vector<cv::Point> conti; //三个点的实验结果不理想
+    for (size_t i = 0; i < 4; i++) {
+        conti.push_back({1, 0});
+        conti.push_back({9, 0});
+        conti.push_back({1, 16});
+        conti.push_back({1, 0});
     }
     try {
+        vector<cv::Point> cont3;
+        cont3.push_back({0, 0});
+        cont3.push_back({8, 0});
+        cont3.push_back({0, 16});
+        double len = cv::arcLength(cont3, false); //轮廓不算最后的连线,结果是8+8倍根号5
+        len = cv::arcLength(cont3, true);         //结果是加上16长度的
         //这个计算距离函数必须要9个点
         float dis = mysc->computeDistance(contQuery, conti);
         cout << dis;
