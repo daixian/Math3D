@@ -93,6 +93,8 @@ namespace dxlib
         /// <param name="path"></param>
         public void LoadFile(string path)
         {
+            path = path.Replace("\"", "");
+
             if (!File.Exists(path))
             {
                 Debug.Log("Observe.LoadFile():文件不存在. " + path);
