@@ -8,7 +8,7 @@
 using namespace std;
 using namespace xuexue;
 
-int main()
+int main_sct()
 {
     //使用一个
     cv::Ptr<cv::ShapeContextDistanceExtractor> mysc = cv::createShapeContextDistanceExtractor();

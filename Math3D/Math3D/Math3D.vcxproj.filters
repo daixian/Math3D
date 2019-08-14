@@ -41,5 +41,8 @@
     <ClCompile Include="ShapeContextTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="SVDTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
