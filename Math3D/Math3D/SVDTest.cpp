@@ -1,4 +1,5 @@
 ﻿#include "stdafx.h"
+#include "UnityCamera.h"
 
 /*
  * 这个项目的DEBUG使用的是MD，然后生成调试信息（禁用优化）。
@@ -51,6 +52,14 @@ static inline Eigen::Vector3d stereoPos(const cv::Mat& Q, double pLx, double pLy
 
 int main()
 {
+    dxlib::UnityCamera cam;
+    cam.position = {0, 0, 0};
+    cam.setEulerAngle({0, 0, 0});
+    cam.updateW2C();
+    cam.updateProj();
+    Eigen::Vector2d screenPoint;
+    bool success = cam.point2Screen({-4, 5, 10}, screenPoint);
+
     cv::Mat scrX = imread("C:\\Users\\dx\\OneDrive\\Pictures\\large.jpg", 0);
 
     Mat projL = (cv::Mat_<double>(3, 4) << 9.3276103922797446e+01, 0., 3.9422296142578125e+02, 0.,
