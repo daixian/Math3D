@@ -54,7 +54,7 @@ int main()
 {
     dxlib::UnityCamera cam;
     cam.position = {0, 0, 0};
-    cam.setEulerAngle({0, 0, 0});
+    cam.setEulerAngle(0, 0, 0);
     cam.updateW2C();
     cam.updateProj();
     Eigen::Vector2d screenPoint;

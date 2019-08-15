@@ -57,16 +57,18 @@ class UnityCamera
     Eigen::Matrix<double, 4, 4> projectionMatrix;
 
     ///-------------------------------------------------------------------------------------------------
-    /// <summary> 欧拉角(单位是度数). </summary>
+    /// <summary> 设置欧拉角(度数). </summary>
     ///
     /// <remarks> Dx, 2019/8/15. </remarks>
     ///
-    /// <param name="euler"> The euler. </param>
+    /// <param name="x"> The x. </param>
+    /// <param name="y"> The y. </param>
+    /// <param name="z"> The z. </param>
     ///-------------------------------------------------------------------------------------------------
-    void setEulerAngle(const Eigen::Vector3d& euler)
+    void setEulerAngle(double x, double y, double z)
     {
         //外坐标轴旋转即是内轴旋转反过来,Eigen中是相对自身坐标系，而unity中是相对外部坐标系
-        Eigen::EulerAnglesYXZd eulerR(euler.y() / 180 * M_PI, euler.x() / 180 * M_PI, euler.z() / 180 * M_PI); //untiy是ZXY所以反过来用YXZ
+        Eigen::EulerAnglesYXZd eulerR(y / 180 * M_PI, x / 180 * M_PI, z / 180 * M_PI); //untiy是ZXY所以反过来用YXZ
         //这里不直接调用angles(),直接作为四元数的构造
         rotation = Eigen::Quaterniond(eulerR);
     }
@@ -126,11 +128,10 @@ class UnityCamera
     ///-------------------------------------------------------------------------------------------------
     bool point2Screen(const Eigen::Vector3d& p3, Eigen::Vector2d& pScreen)
     {
-        Eigen::Matrix<double, 4, 1> hp3, p_cam, p_clip;
-        hp3 << p3.x(), p3.y(), p3.z(), 1;
+        Eigen::Matrix<double, 4, 1> hp3, p_clip;
+        hp3 << p3.x(), p3.y(), p3.z(), 1; //齐次
 
-        p_cam = worldToCameraMatrix * hp3;
-        p_clip = projectionMatrix * p_cam;
+        p_clip = projectionMatrix * worldToCameraMatrix * hp3;
         //p_clip的范围在unity里是[-1,1]
         if (p_clip(0) >= -abs(p_clip(3)) &&
             p_clip(0) <= abs(p_clip(3)) &&
