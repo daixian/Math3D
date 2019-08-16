@@ -53,12 +53,20 @@ static inline Eigen::Vector3d stereoPos(const cv::Mat& Q, double pLx, double pLy
 int main()
 {
     dxlib::UnityCamera cam;
-    cam.position = {0, 0, 0};
-    cam.setEulerAngle(0, 0, 0);
+    //cam.position = {0, 0, 0};
+    //cam.setEulerAngle(0, 0, 0);
+    cam.screenSize = {640, 360};
+
     cam.updateW2C();
     cam.updateProj();
     Eigen::Vector2d screenPoint;
-    bool success = cam.point2Screen({-4, 5, 10}, screenPoint);
+    bool success = cam.point2Screen({0.5, 0.3, 1}, screenPoint);
+
+    Eigen::Matrix<double, 3, 3> mcam;
+    mcam << 3.1145309294435958e+02, 0., 3.1981847499872049e+02, 0.,
+        3.1143397076999474e+02, 1.7979797969812509e+02, 0., 0., 1.;
+    Eigen::Vector3d p{0.5, 0.3, 1};
+    Eigen::Vector3d sp = mcam * p;
 
     cv::Mat scrX = imread("C:\\Users\\dx\\OneDrive\\Pictures\\large.jpg", 0);
 

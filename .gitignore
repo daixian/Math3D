@@ -339,3 +339,7 @@ Simulation/Assembly-CSharp\.csproj
 /VSCodeCpp/build
 /Simulation/config.json
 /Simulation/Assembly-CSharp-Editor.csproj
+
+Simulation/Camera1/
+
+Simulation/Camera2/

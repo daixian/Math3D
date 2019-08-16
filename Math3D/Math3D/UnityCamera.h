@@ -33,7 +33,7 @@ class UnityCamera
     Eigen::Vector3d position = {0, 0, 0};
 
     // 相机的世界旋转.
-    Eigen::Quaterniond rotation = {0, 0, 0, 1};
+    Eigen::Quaterniond rotation = {1, 0, 0, 0};
 
     // 相机FOV(度数).
     double FOV = 60;
@@ -44,11 +44,8 @@ class UnityCamera
     // 远裁剪面.
     double Far = 100;
 
-    // 屏幕宽.
-    int screenWidth = 1920;
-
-    // 屏幕高.
-    int screenHeight = 1080;
+    // 屏幕的宽高，x表示宽，y表示高.
+    Eigen::Vector2i screenSize = {1920, 1080};
 
     // 世界到相机矩阵.
     Eigen::Matrix<double, 4, 4> worldToCameraMatrix;
@@ -107,7 +104,7 @@ class UnityCamera
     void updateProj()
     {
         //这里横纵比实际上还是需要一个Viewport Rect中的W和H属性共同决定
-        double aspect = screenWidth / (double)screenHeight;
+        double aspect = screenSize.x() / (double)screenSize.y();
 
         //公式推导见冯乐乐的Shader书P79,第一个公式M_frustum,图2有笔误
         projectionMatrix << (1 / tan((FOV / 180 * M_PI) / 2)) / aspect, 0, 0, 0,
@@ -140,8 +137,8 @@ class UnityCamera
             p_clip(2) >= -abs(p_clip(3)) &&
             p_clip(2) <= abs(p_clip(3))) {
             //把[-1,1]的范围转化到以屏幕左上角为原点的像素坐标
-            double x = p_clip(0) * screenWidth / (2 * p_clip(3)) + screenWidth / 2;
-            double y = screenHeight / 2 - p_clip(1) / p_clip(3) * screenHeight / 2;
+            double x = p_clip(0) * screenSize.x() / (2 * p_clip(3)) + screenSize.x() / 2;
+            double y = screenSize.y() / 2 - p_clip(1) / p_clip(3) * screenSize.y() / 2;
             pScreen = Eigen::Vector2d(x, y);
             return true;
         }

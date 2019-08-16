@@ -47,9 +47,14 @@ public class Calibration : MonoBehaviour
     {
         if (GUILayout.Button("采图"))
         {
+            if (!Directory.Exists(cam1.name))
+                Directory.CreateDirectory(cam1.name);
+            if (!Directory.Exists(cam2.name))
+                Directory.CreateDirectory(cam2.name);
+
             Debug.Log(JsonMapper.ToJson(cam1));
-            CaptrueCamera(cam1, new Rect(0, 0, 1920, 1080), "L" + count);
-            CaptrueCamera(cam2, new Rect(0, 0, 1920, 1080), "R" + count);
+            CaptrueCamera(cam1, new Rect(0, 0, 1920, 1080), cam1.name + "\\" + count);
+            CaptrueCamera(cam2, new Rect(0, 0, 1920, 1080), cam2.name + "\\" + count);
             count++;
         }
 
@@ -87,7 +92,6 @@ public class Calibration : MonoBehaviour
                 Debug.Log("ios");
 #elif UNITY_EDITOR
         filename = Path.Combine(filename + formatType);
-        Debug.Log("editor");
 #endif
         System.IO.File.WriteAllBytes(filename, bytes);
         Debug.Log(string.Format("截屏了一张照片: {0}", filename));
