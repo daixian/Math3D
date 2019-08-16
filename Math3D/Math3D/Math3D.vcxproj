@@ -23,7 +23,7 @@
     <ProjectGuid>{0524EE6D-EBF6-4585-BC8A-5751C2E6D72E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Math3D</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

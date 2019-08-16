@@ -125,10 +125,9 @@ class UnityCamera
     ///-------------------------------------------------------------------------------------------------
     bool point2Screen(const Eigen::Vector3d& p3, Eigen::Vector2d& pScreen)
     {
-        Eigen::Matrix<double, 4, 1> hp3, p_clip;
-        hp3 << p3.x(), p3.y(), p3.z(), 1; //齐次
+        Eigen::Vector4d hp3{p3.x(), p3.y(), p3.z(), 1}; //齐次
 
-        p_clip = projectionMatrix * worldToCameraMatrix * hp3;
+        Eigen::Vector4d p_clip = projectionMatrix * worldToCameraMatrix * hp3;
         //p_clip的范围在unity里是[-1,1]
         if (p_clip(0) >= -abs(p_clip(3)) &&
             p_clip(0) <= abs(p_clip(3)) &&
