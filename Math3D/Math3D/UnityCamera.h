@@ -53,6 +53,9 @@ class UnityCamera
     // 投影矩阵
     Eigen::Matrix<double, 4, 4> projectionMatrix;
 
+    // opencv里的相机内参矩阵
+    Eigen::Matrix<double, 3, 3> ocvCameraMatrix;
+
     ///-------------------------------------------------------------------------------------------------
     /// <summary> 设置欧拉角(度数). </summary>
     ///
@@ -97,7 +100,7 @@ class UnityCamera
     }
 
     ///-------------------------------------------------------------------------------------------------
-    /// <summary> 根据FOV和纵横比计算投影矩阵. </summary>
+    /// <summary> 根据FOV和纵横比计算投影矩阵和OpenCV相机模型的内参矩阵. </summary>
     ///
     /// <remarks> Dx, 2019/8/15. </remarks>
     ///-------------------------------------------------------------------------------------------------
@@ -106,11 +109,17 @@ class UnityCamera
         //这里横纵比实际上还是需要一个Viewport Rect中的W和H属性共同决定
         double aspect = screenSize.x() / (double)screenSize.y();
 
-        //公式推导见冯乐乐的Shader书P79,第一个公式M_frustum,图2有笔误
+        //公式推导见冯乐乐的Shader书P79,第一个公式M_frustum,书中图2有笔误
         projectionMatrix << (1 / tan((FOV / 180 * M_PI) / 2)) / aspect, 0, 0, 0,
             0, 1 / tan((FOV / 180 * M_PI) / 2), 0, 0,
             0, 0, -(Far + Near) / (Far - Near), -2 * Near * Far / (Far - Near),
             0, 0, -1, 0;
+
+        //根据FOV计算相机内参矩阵,内参矩阵中的f的物理含义可以理解为在1米远处的一米长度的物体在画面上代表了多少像素
+        double fx = (screenSize.y() / 2) / tan((FOV / 180 * M_PI) / 2);
+        ocvCameraMatrix << fx, 0, (double)screenSize.x() / 2,
+            0, fx, (double)screenSize.y() / 2,
+            0, 0, 1;
     }
 
     ///-------------------------------------------------------------------------------------------------
