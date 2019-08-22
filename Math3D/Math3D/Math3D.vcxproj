@@ -75,8 +75,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\dxlib\lib\opencv-341-build-x64-vs2017\install\include;C:\dxlib\lib\eigen;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\dxlib\lib\opencv-341-build-x64-vs2017\install\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\dxlib\lib\opencv-341-build-x64-vs2017\install\include;C:\dxlib\lib\eigen;C:\dxlib\lib\boost_1_70_0;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\dxlib\lib\opencv-341-build-x64-vs2017\install\x64\vc15\lib;C:\dxlib\lib\boost_1_70_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
