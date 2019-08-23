@@ -50,7 +50,7 @@ static inline Eigen::Vector3d stereoPos(const cv::Mat& Q, double pLx, double pLy
     return point;
 }
 
-int main()
+int main_SVD()
 {
     dxlib::UnityCamera cam;
     //cam.position = {0, 0, 0};
@@ -105,4 +105,6 @@ int main()
     SVDRESTRUCT(scrX, result, 0.5);
     cv::imshow("1", scrX);
     waitKey(0);
+
+    return 0;
 }
