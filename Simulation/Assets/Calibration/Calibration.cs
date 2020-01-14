@@ -6,6 +6,7 @@ using UnityEngine;
 using DTO;
 using xuexue.LitJson;
 using xuexue.common.json;
+using Newtonsoft.Json;
 
 public class Calibration : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class Calibration : MonoBehaviour
     private void Awake()
     {
         JsonTypeBind.Bind();
+        xuexue.json.U3DJsonSetting.SetDefault();
     }
 
     // Use this for initialization
