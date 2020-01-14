@@ -21,10 +21,13 @@ namespace xuexue.json
             {
                 JsonSerializerSettings settings = new JsonSerializerSettings();
                 settings.Formatting = Formatting.Indented;
+                settings.MissingMemberHandling = MissingMemberHandling.Ignore;
                 settings.Converters.Add(new Vector3Converter());
                 settings.Converters.Add(new QuaternionConverter());
                 settings.Converters.Add(new Color32Converter());
                 settings.Converters.Add(new ColorConverter());
+
+                settings.Converters.Add(new DTO.cvComponentConverter());
                 return settings;
             };
         }
