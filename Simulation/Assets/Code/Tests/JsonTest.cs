@@ -20,7 +20,33 @@ namespace dxlib
         public void SetUp()
         {
             xuexue.json.U3DJsonSetting.SetDefault();
+
+            //初始化一段实验数据.
+            cvLine line = new cvLine()
+            {
+                type = "cvLine",
+                color = new Color32(0, 0, 0, 255),
+                pos0 = new Vector3(0, 0, 1),
+                pos1 = new Vector3(123, 32, 3)
+            };
+            cvObject obj2 = new cvObject();
+            obj2.components.Add(line);
+
+            cvObject obj = new cvObject();
+            obj.name = "一个名字";
+            obj.prefabName = "pname";
+            obj.position = new Vector3(1, 2, 3);
+            obj.rotation = Quaternion.Euler(123, 312, 3);
+            obj.children.Add(obj2);
+
+            scene.objects.Add(obj);
+            scene.objects.Add(obj);
+            scene.objects.Add(obj);
         }
+
+        //实验数据
+        cvScene scene = new DTO.cvScene();
+
 
         [Test]
         public void Vector3()
@@ -92,5 +118,13 @@ namespace dxlib
 
         }
 
+        [Test]
+        public void cvScene()
+        {
+            string text = JsonConvert.SerializeObject(scene);
+            cvScene obj = JsonConvert.DeserializeObject<cvScene>(text);
+
+            Debug.Assert(obj.objects.Count == scene.objects.Count);
+        }
     }
 }

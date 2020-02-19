@@ -75,6 +75,8 @@ namespace DTO
         public List<cvObject> objects = new List<cvObject>();
     }
 
+    #region JsonConverter
+
     /// <summary>
     /// cvComponent的json转换
     /// </summary>
@@ -113,4 +115,6 @@ namespace DTO
             return false;
         }
     }
+
+    #endregion
 }

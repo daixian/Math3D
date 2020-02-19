@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using xuexue.LitJson;
 
 namespace dxlib
 {
     /// <summary>
     /// 配置文件
     /// </summary>
-    [xuexueJsonClass]
+    [JsonObject(MemberSerialization.OptIn)]
     public class Config
     {
         /// <summary>
@@ -24,28 +24,20 @@ namespace dxlib
         /// <summary>
         /// 单例
         /// </summary>
-        [xuexueJsonIgnore]
-        private static Config _instance = new Config();
-
-        /// <summary>
-        /// 单例
-        /// </summary>
-        [xuexueJsonIgnore]
-        public static Config Inst
-        {
-            get { return _instance; }
-        }
+        public static Config Inst { get; private set; } = new Config();
 
         #region 字段
 
         /// <summary>
         /// 历史文件列表(路径),直接暴露出来用，注意线程安全
         /// </summary>
+        [JsonProperty]
         private List<string> listJsonSceneHistory = new List<string>();
 
         /// <summary>
         /// 最后一次加载的文件路径
         /// </summary>
+        [JsonProperty]
         public string lastJsonScene;
 
         #endregion
@@ -57,7 +49,7 @@ namespace dxlib
         /// </summary>
         public void Save(string path = "./config.json")
         {
-            string text = xuexue.LitJson.JsonMapper.ToJson(_instance);
+            string text = xuexue.LitJson.JsonMapper.ToJson(Inst);
             File.WriteAllText(path, text);
         }
 
@@ -71,7 +63,7 @@ namespace dxlib
                 return;
             }
             string text = File.ReadAllText(path);
-            _instance = xuexue.LitJson.JsonMapper.ToObject<Config>(text);
+            Inst = JsonConvert.DeserializeObject<Config>(text);
         }
 
         #endregion

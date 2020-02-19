@@ -27,6 +27,7 @@ namespace xuexue.json
                 settings.Converters.Add(new Color32Converter());
                 settings.Converters.Add(new ColorConverter());
 
+                //组件的转换方法
                 settings.Converters.Add(new DTO.cvComponentConverter());
                 return settings;
             };
