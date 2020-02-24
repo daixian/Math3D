@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using DTO;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -12,7 +14,7 @@ namespace dxlib
         /// <summary>
         /// json场景文件路径
         /// </summary>
-        public string jsonPath = @"../omake/stereoCalib.json";
+        public string jsonPath = @"../omake/Camera-F3DSC01.json";
 
         /// <summary>
         /// 支持的物体type类型
@@ -59,6 +61,8 @@ namespace dxlib
 
         void Awake()
         {
+            xuexue.json.U3DJsonSetting.SetDefault();
+
             Config.Inst.Load();
             LoadResources();
             QualitySettings.vSyncCount = 4;//设置垂直同步来减少cpu占用
@@ -104,11 +108,11 @@ namespace dxlib
             Config.Inst.AddHistory(path);
 
             Clear();
-            string str = File.ReadAllText(path);
-            CvScene scene = xuexue.LitJson.JsonMapper.ToObject<CvScene>(str);
-            for (int i = 0; i < scene.vGameObj.Length; i++)
+            string text = File.ReadAllText(path);
+            cvScene scene = JsonConvert.DeserializeObject<cvScene>(text);
+            for (int i = 0; i < scene.objects.Count; i++)
             {
-                this.AddCvObj(scene.vGameObj[i]);
+                this.AddCvObj(scene.objects[i]);
             }
         }
 
@@ -117,23 +121,20 @@ namespace dxlib
         /// </summary>
         /// <param name="co"></param>
         /// <param name="parent"></param>
-        private void AddCvObj(CvObject co, GameObject parent = null)
+        private void AddCvObj(cvObject co, GameObject parent = null)
         {
-            Vector3 pos = new Vector3((float)co.position[0], (float)co.position[1], (float)co.position[2]);
-            Quaternion rot = new Quaternion((float)co.rotation[0], (float)co.rotation[1], (float)co.rotation[2], (float)co.rotation[3]);
-            Vector3 scale = new Vector3(1, 1, 1);
-            if (co.localScale != null)
-                scale = new Vector3((float)co.localScale[0], (float)co.localScale[1], (float)co.localScale[2]);
-
             GameObject go;
-            if (co.type >= 0)//type=-1则为空物体
+            if (co.type > 0 || !string.IsNullOrEmpty(co.prefabName))//如果它不是一个空物体
             {
-                GameObject pref = prefab[co.type];
-                if (pref == null)//如果支持资源里面没有这个物体
+                GameObject pref = Resources.Load<GameObject>(co.prefabName);
+                if (pref != null)//如果支持资源里面有这个物体
                 {
-                    pref = prefab[(co.type / 100) * 100];//那么就使用这个类型物体的起始类型
+                    go = GameObject.Instantiate(pref);
                 }
-                go = GameObject.Instantiate(pref);
+                else
+                {
+                    go = new GameObject();
+                }
             }
             else
             {
@@ -146,51 +147,60 @@ namespace dxlib
 
             if (co.isLocal)//json里的坐标是否是本地坐标
             {
-                go.transform.localPosition = pos;
-                go.transform.localRotation = rot;
+                go.transform.localPosition = co.position;
+                go.transform.localRotation = co.rotation;
             }
             else
             {
-                go.transform.position = pos;
-                go.transform.rotation = rot;
+                go.transform.position = co.position;
+                go.transform.rotation = co.rotation;
             }
-            if (scale != Vector3.zero)//只有当缩放不为0的时候才设置(如果为0认为忽略缩放设置，使用u3d资源里的缩放)
-                go.transform.localScale = scale;
+
+            go.transform.localScale = co.localScale;
+
+            if (co.components != null)
+            {
+                for (int i = 0; i < co.components.Count; i++)
+                {
+                    this.AddComponentWithcv(co.components[i], go);
+                }
+            }
 
             //设置好自己的坐标之后在安排自己的子物体们
             if (co.children != null)
             {
-                for (int i = 0; i < co.children.Length; i++)
+                for (int i = 0; i < co.children.Count; i++)
                 {
                     AddCvObj(co.children[i], go);//递归一下
                 }
             }
 
-            if (co.lines != null)
+            //尝试给颜色赋值
+            Renderer rnd = go.GetComponentInChildren<Renderer>();
+            if (rnd != null)
             {
-                for (int i = 0; i < co.lines.Length; i++)
-                {
-                    this.AddCvLine(co.lines[i], go);
-                }
+                rnd.material.color = co.color;
             }
 
             go.SetActive(co.isActive);
             _listObj.Add(go);//记录这个添加的物体
         }
 
-        private void AddCvLine(CvLine cl, GameObject go)
+        private void AddComponentWithcv(cvComponent com, GameObject go)
         {
-            GameObject line = new GameObject(cl.name);
-            line.transform.parent = go.transform;
-            LineRenderer lr = line.AddComponent<LineRenderer>();
-            lr.startWidth = 0.001f;
-            lr.endWidth = 0.001f;
-            lr.positionCount = 2;
-            lr.material = this.lineType[cl.type];
-            lr.SetPositions(new Vector3[] { new Vector3((float)cl.pos0[0], (float)cl.pos0[1], (float)cl.pos0[2]),
-                                            new Vector3((float)cl.pos1[0], (float)cl.pos1[1], (float)cl.pos1[2])});
+            if (com.GetType() == typeof(cvLine))
+            {
+                cvLine cl = com as cvLine;
 
-            _listObj.Add(line);//记录这个添加的物体
+                LineRenderer lr = go.AddComponent<LineRenderer>();
+                lr.startWidth = 0.001f;
+                lr.endWidth = 0.001f;
+                lr.positionCount = 2;
+                lr.material = Resources.Load<Material>("white");
+                lr.material.color = cl.color;
+                lr.SetPositions(new Vector3[] { cl.pos0, cl.pos1 });
+            }
+
         }
 
         /// <summary>

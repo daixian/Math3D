@@ -62,6 +62,9 @@ namespace DTO
         /// <summary> 这个物体是否在u3d里默认是显示的. </summary>
         public bool isActive = true;
 
+        /// <summary> 上面的坐标旋转是否是本地坐标 <summary>
+        public bool isLocal = false;
+
         /// <summary> 所有包含的组件. </summary>
         public List<cvComponent> components = new List<cvComponent>();
 

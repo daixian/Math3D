@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -125,6 +126,19 @@ namespace dxlib
             cvScene obj = JsonConvert.DeserializeObject<cvScene>(text);
 
             Debug.Assert(obj.objects.Count == scene.objects.Count);
+        }
+
+        [Test]
+        public void loadFile()
+        {
+            string path = @"D:\GC3000\IDE0OVMzVxEAJgAm\images\calib\Camera-F3DSC01.json";
+            if (File.Exists(path))
+            {
+                string text = File.ReadAllText(path);
+                cvScene obj = JsonConvert.DeserializeObject<cvScene>(text);
+
+                Debug.Assert(obj.objects.Count > -1);
+            }
         }
     }
 }
