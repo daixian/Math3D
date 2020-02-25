@@ -68,7 +68,6 @@
     <Compile Include="Assets\Code\Simulation\Calibration\TranInfo.cs" />
     <Compile Include="Assets\Code\Simulation\Data\Config.cs" />
     <Compile Include="Assets\Code\Simulation\Data\Dto\cvScene.cs" />
-    <Compile Include="Assets\Code\Simulation\Display\CvScene.cs" />
     <Compile Include="Assets\Code\Simulation\Display\Estimate.cs" />
     <Compile Include="Assets\Code\Simulation\Display\JsonTypeBind.cs" />
     <Compile Include="Assets\Code\Simulation\Display\Observe.cs" />

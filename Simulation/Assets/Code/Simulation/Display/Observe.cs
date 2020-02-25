@@ -17,54 +17,16 @@ namespace dxlib
         public string jsonPath = @"../omake/Camera-F3DSC01.json";
 
         /// <summary>
-        /// 支持的物体type类型
-        /// </summary>
-        private GameObject[] prefab = new GameObject[1000];
-
-        /// <summary>
-        /// 根据不同的线类型来画不同颜色的线
-        /// </summary>
-        private Material[] lineType;
-
-        /// <summary>
         /// 所有物体的列表
         /// </summary>
         private List<GameObject> _listObj = new List<GameObject>();
 
-        /// <summary>
-        /// 载入所需要的资源
-        /// </summary>
-        private void LoadResources()
-        {
-            lineType = new Material[] { Resources.Load<Material>("red"),
-                                        Resources.Load<Material>("green"),
-                                        Resources.Load<Material>("blue"),
-                                        Resources.Load<Material>("white"),
-                                        Resources.Load<Material>("cyan"),
-                                        Resources.Load<Material>("lightPink"),
-                                        Resources.Load<Material>("orange")
-            };
-            //载入所有的cvObj预制体  ,支持1000个
-            int baseIndex = 0;
-            for (int i = 0; i < 1000; i++)
-            {
-                GameObject obj = Resources.Load<GameObject>("CvObj" + i);//载入所有命名为CvObj的预制体
-                if (obj != null)
-                    prefab[i] = obj;
-                else
-                {
-                    baseIndex += 100;//提升100到下一种资源物体
-                    i = baseIndex - 1;//这里要减一因为i马上要自增1
-                }
-            }
-        }
 
         void Awake()
         {
             xuexue.json.U3DJsonSetting.SetDefault();
 
             Config.Inst.Load();
-            LoadResources();
             QualitySettings.vSyncCount = 4;//设置垂直同步来减少cpu占用
         }
 
@@ -162,7 +124,7 @@ namespace dxlib
             {
                 for (int i = 0; i < co.components.Count; i++)
                 {
-                    this.AddComponentWithcv(co.components[i], go);
+                    this.AddComponentWithJsonObj(co.components[i], go);
                 }
             }
 
@@ -175,7 +137,7 @@ namespace dxlib
                 }
             }
 
-            //尝试给颜色赋值
+            //尝试给颜色赋值，寻找子物体下面的组件
             Renderer rnd = go.GetComponentInChildren<Renderer>();
             if (rnd != null)
             {
@@ -186,7 +148,7 @@ namespace dxlib
             _listObj.Add(go);//记录这个添加的物体
         }
 
-        private void AddComponentWithcv(cvComponent com, GameObject go)
+        private void AddComponentWithJsonObj(cvComponent com, GameObject go)
         {
             if (com.GetType() == typeof(cvLine))
             {
