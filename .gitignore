@@ -343,3 +343,7 @@ Simulation/Assembly-CSharp\.csproj
 Simulation/Camera1/
 
 Simulation/Camera2/
+/Simulation/*.csproj
+/Simulation/Simulation.csproj
+/Simulation/Simulation.sln
+/Simulation/UnitTest.csproj

@@ -72,6 +72,10 @@ namespace dxlib
             Clear();
             string text = File.ReadAllText(path);
             cvScene scene = JsonConvert.DeserializeObject<cvScene>(text);
+            if (scene != null || scene.objects != null)
+            {
+                Debug.LogWarning("Observe.LoadFile():Json反序列化失败,场景对象为null!");
+            }
             for (int i = 0; i < scene.objects.Count; i++)
             {
                 this.AddCvObj(scene.objects[i]);
