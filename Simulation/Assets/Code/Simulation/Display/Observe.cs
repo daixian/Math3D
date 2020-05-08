@@ -142,13 +142,15 @@ namespace dxlib
                 }
             }
 
-            //尝试给颜色赋值，寻找子物体下面的组件
-            Renderer rnd = go.GetComponentInChildren<Renderer>();
-            if (rnd != null)
+            //当这个物体有模型的时候，尝试给颜色赋值，寻找子物体下面的组件
+            if (!string.IsNullOrEmpty(co.prefabName) || co.type != 0)
             {
-                rnd.material.color = co.color;
+                Renderer rnd = go.GetComponentInChildren<Renderer>();
+                if (rnd != null)
+                {
+                    rnd.material.color = co.color;
+                }
             }
-
             go.SetActive(co.isActive);
             _listObj.Add(go);//记录这个添加的物体
         }
