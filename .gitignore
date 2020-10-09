@@ -347,3 +347,4 @@ Simulation/Camera2/
 /Simulation/Simulation.csproj
 /Simulation/Simulation.sln
 /Simulation/UnitTest.csproj
+Simulation/Packages/packages-lock.json
