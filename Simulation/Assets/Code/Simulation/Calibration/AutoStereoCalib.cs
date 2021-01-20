@@ -17,6 +17,7 @@ namespace dxlib
 
         private void Awake()
         {
+            client.EventMsgProc += OnEventMsgProc;
             client.Connect("AutoStereoCalib_U3D", "127.0.0.1", 42017);
         }
 
@@ -28,6 +29,14 @@ namespace dxlib
         private void Update()
         {
             client.Update();
+
+
+
+        }
+
+        private void OnEventMsgProc(Client sender, int id, string msg)
+        {
+            Debug.Log("处理消息id={id},msg={msg}");
         }
 
         private void OnDestroy()

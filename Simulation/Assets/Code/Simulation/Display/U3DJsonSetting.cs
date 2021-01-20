@@ -22,6 +22,7 @@ namespace xuexue.json
                 JsonSerializerSettings settings = new JsonSerializerSettings();
                 settings.Formatting = Formatting.Indented;
                 settings.MissingMemberHandling = MissingMemberHandling.Ignore;
+                settings.Converters.Add(new Vector2Converter());
                 settings.Converters.Add(new Vector3Converter());
                 settings.Converters.Add(new QuaternionConverter());
                 settings.Converters.Add(new Color32Converter());
@@ -31,6 +32,46 @@ namespace xuexue.json
                 settings.Converters.Add(new DTO.cvComponentConverter());
                 return settings;
             };
+        }
+
+
+        /// <summary>
+        /// Vector2的转换实现
+        /// </summary>
+        class Vector2Converter : JsonConverter
+        {
+            [JsonObject(MemberSerialization.OptIn)]
+            struct TVector2
+            {
+                [JsonProperty]
+                public float x;
+                [JsonProperty]
+                public float y;
+
+            }
+
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                //这里懒得写Json文本的转换方法了,所以借助了TVector2这个类型
+                var obj = (Vector3)value;
+                TVector2 tobj = new TVector2() { x = obj.x, y = obj.y };
+                serializer.Serialize(writer, tobj);
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                TVector2 tObj = serializer.Deserialize<TVector2>(reader);
+                return new Vector3(tObj.x, tObj.y);
+            }
+
+            public override bool CanConvert(Type objectType)
+            {
+                if (objectType == typeof(Vector2))
+                {
+                    return true;
+                }
+                return false;
+            }
         }
 
         /// <summary>
