@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,9 +16,13 @@ namespace dxlib
     {
         Client client = new Client();
 
+        // 标定板
+        public Transform board;
+
         private void Awake()
         {
-            client.EventMsgProc += OnEventMsgProc;
+            client.TCPEventMsgProc += OnTCPEventMsgProc;
+            client.KCPEventMsgProc += OnKCPEventMsgProc;
             client.Connect("AutoStereoCalib_U3D", "127.0.0.1", 42017);
         }
 
@@ -31,12 +36,30 @@ namespace dxlib
             client.Update();
 
 
+            TimeSpan ts = DateTime.Now.Subtract(lastTime);
+            if (ts.TotalSeconds > 5)
+            {
+                lastTime = DateTime.Now;
+                client.Send(0, "❤~");
+            }
 
         }
 
-        private void OnEventMsgProc(Client sender, int id, string msg)
+        DateTime lastTime;
+
+        private void OnTCPEventMsgProc(Client sender, int id, string msg)
         {
-            Debug.Log("处理消息id={id},msg={msg}");
+            Debug.Log($"处理TCP消息id={id},msg={msg}");
+        }
+
+        private void OnKCPEventMsgProc(Client sender, int id, string msg)
+        {
+            Debug.Log($"处理KCP消息id={id},msg={msg}");
+            AutoCalibDto dto = JsonConvert.DeserializeObject<AutoCalibDto>(msg);
+            if (board != null)
+            {
+                board.position = board.position + new Vector3(dto.moveTo.x, dto.moveTo.y, 0);
+            }
         }
 
         private void OnDestroy()

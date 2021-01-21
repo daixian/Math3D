@@ -43,7 +43,9 @@ namespace xuexue.DNET
             Create(name, host, port, out ptrServer);
             if (ptrServer != IntPtr.Zero)
             {
-                SetMessageProc(ptrServer, Marshal.GetFunctionPointerForDelegate(msgProcCallback));
+                SetMessageProc(ptrServer,
+                    Marshal.GetFunctionPointerForDelegate(tcpMsgProcCallback),
+                    Marshal.GetFunctionPointerForDelegate(kcpMsgProcCallback));
                 dictServers.Add(ptrServer, this);
             }
             Start(ptrServer);
@@ -55,7 +57,8 @@ namespace xuexue.DNET
         public void Close()
         {
             dictServers.Remove(ptrServer);
-            EventMsgProc = null;
+            TCPEventMsgProc = null;
+            KCPEventMsgProc = null;
             Close(ptrServer);
             ptrServer = IntPtr.Zero;
         }
@@ -82,9 +85,14 @@ namespace xuexue.DNET
         }
 
         /// <summary>
-        /// 外部的消息处理事件.
+        /// TCP外部的消息处理事件.
         /// </summary>
-        public event Action<Server, int, string> EventMsgProc;
+        public event Action<Server, int, string> TCPEventMsgProc;
+
+        /// <summary>
+        /// KCP外部的消息处理事件.
+        /// </summary>
+        public event Action<Server, int, string> KCPEventMsgProc;
 
         /// <summary>
         /// 这个服务器对象指针.
@@ -93,27 +101,46 @@ namespace xuexue.DNET
 
         #region 全局静态
 
-        static void MsgProc(IntPtr sender, int id, string message)
+        static void TCPMsgProc(IntPtr sender, int id, string message)
         {
             if (dictServers.ContainsKey(sender))
             {
                 //如果有这个server的记录
                 Server server = dictServers[sender];
-                if (server.EventMsgProc != null)
+                if (server.TCPEventMsgProc != null)
                 {
                     try
                     {
-                        server.EventMsgProc(server, id, message);//执行事件
+                        server.TCPEventMsgProc(server, id, message);//执行事件
                     }
                     catch (Exception)
                     {
                     }
                 }
             }
-
         }
 
-        private static MsgProcCallbackDelegate msgProcCallback = new MsgProcCallbackDelegate(MsgProc);
+        static void KCPMsgProc(IntPtr sender, int id, string message)
+        {
+            if (dictServers.ContainsKey(sender))
+            {
+                //如果有这个server的记录
+                Server server = dictServers[sender];
+                if (server.KCPEventMsgProc != null)
+                {
+                    try
+                    {
+                        server.KCPEventMsgProc(server, id, message);//执行事件
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+        }
+
+        private static MsgProcCallbackDelegate tcpMsgProcCallback = new MsgProcCallbackDelegate(TCPMsgProc);
+        private static MsgProcCallbackDelegate kcpMsgProcCallback = new MsgProcCallbackDelegate(KCPMsgProc);
 
         private static Dictionary<IntPtr, Server> dictServers = new Dictionary<IntPtr, Server>();
 
@@ -135,7 +162,7 @@ namespace xuexue.DNET
         /// <param name="proc"></param>
         /// <returns></returns>
         [DllImport(DllName, EntryPoint = "dnServerSetMessageProc", CallingConvention = CallingConvention.StdCall)]
-        internal static extern DNetError SetMessageProc(IntPtr server, IntPtr proc);
+        internal static extern DNetError SetMessageProc(IntPtr server, IntPtr tcpProc, IntPtr kcpProc);
 
         /// <summary>
         /// 创建服务器端.
@@ -201,19 +228,22 @@ namespace xuexue.DNET
             Create(name, out ptrNative);
             if (ptrNative != IntPtr.Zero)
             {
-                SetMessageProc(ptrNative, Marshal.GetFunctionPointerForDelegate(msgProcCallback));
+                SetMessageProc(ptrNative,
+                    Marshal.GetFunctionPointerForDelegate(tcpMsgProcCallback),
+                    Marshal.GetFunctionPointerForDelegate(kcpMsgProcCallback));
                 dictClient.Add(ptrNative, this);
             }
             LogOnError(Connect(ptrNative, host, port), "Connect");
         }
 
         /// <summary>
-        /// 关闭服务器.
+        /// 关闭客户端.
         /// </summary>
         public void Close()
         {
             dictClient.Remove(ptrNative);
-            EventMsgProc = null;
+            TCPEventMsgProc = null;
+            KCPEventMsgProc = null;
             LogOnError(Close(ptrNative), "Close");
             ptrNative = IntPtr.Zero;
         }
@@ -240,9 +270,14 @@ namespace xuexue.DNET
         }
 
         /// <summary>
-        /// 外部的消息处理事件.
+        /// TCP外部的消息处理事件.
         /// </summary>
-        public event Action<Client, int, string> EventMsgProc;
+        public event Action<Client, int, string> TCPEventMsgProc;
+
+        /// <summary>
+        /// KCP外部的消息处理事件.
+        /// </summary>
+        public event Action<Client, int, string> KCPEventMsgProc;
 
         /// <summary>
         /// 这个服务器对象指针.
@@ -268,18 +303,17 @@ namespace xuexue.DNET
         }
 
 
-
-        static void MsgProc(IntPtr sender, int id, string message)
+        static void TCPMsgProc(IntPtr sender, int id, string message)
         {
             if (dictClient.ContainsKey(sender))
             {
-                //如果有这个server的记录
+                //如果有这个client的记录
                 Client client = dictClient[sender];
-                if (client.EventMsgProc != null)
+                if (client.TCPEventMsgProc != null)
                 {
                     try
                     {
-                        client.EventMsgProc(client, id, message);//执行事件
+                        client.TCPEventMsgProc(client, id, message);//执行事件
                     }
                     catch (Exception)
                     {
@@ -288,7 +322,27 @@ namespace xuexue.DNET
             }
         }
 
-        private static MsgProcCallbackDelegate msgProcCallback = new MsgProcCallbackDelegate(MsgProc);
+        static void KCPMsgProc(IntPtr sender, int id, string message)
+        {
+            if (dictClient.ContainsKey(sender))
+            {
+                //如果有这个client的记录
+                Client client = dictClient[sender];
+                if (client.KCPEventMsgProc != null)
+                {
+                    try
+                    {
+                        client.KCPEventMsgProc(client, id, message);//执行事件
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+        }
+
+        private static MsgProcCallbackDelegate tcpMsgProcCallback = new MsgProcCallbackDelegate(TCPMsgProc);
+        private static MsgProcCallbackDelegate kcpMsgProcCallback = new MsgProcCallbackDelegate(KCPMsgProc);
 
         private static Dictionary<IntPtr, Client> dictClient = new Dictionary<IntPtr, Client>();
 
@@ -310,7 +364,7 @@ namespace xuexue.DNET
         /// <param name="proc"></param>
         /// <returns></returns>
         [DllImport(DllName, EntryPoint = "dnClientSetMessageProc", CallingConvention = CallingConvention.StdCall)]
-        internal static extern DNetError SetMessageProc(IntPtr client, IntPtr proc);
+        internal static extern DNetError SetMessageProc(IntPtr client, IntPtr tcpProc, IntPtr kcpProc);
 
         /// <summary>
         /// 创建客户端端.
