@@ -11,6 +11,12 @@ namespace dxlib
     [JsonObject(MemberSerialization.Fields)]
     public class AutoCalibDto
     {
+        // 命令的序号
+        public int cmdID = 0;
+
+        // 是否是重置
+        public bool reset = false;
+
         // 是否显示标定板
         public bool isEnable = false;
 

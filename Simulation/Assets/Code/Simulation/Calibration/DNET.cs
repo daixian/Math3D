@@ -280,6 +280,19 @@ namespace xuexue.DNET
         public event Action<Client, int, string> KCPEventMsgProc;
 
         /// <summary>
+        /// 是否已经连接了服务器.
+        /// </summary>
+        public bool isConnected
+        {
+            get
+            {
+                bool res = false;
+                IsAccepted(ptrNative, out res);
+                return res;
+            }
+        }
+
+        /// <summary>
         /// 这个服务器对象指针.
         /// </summary>
         private IntPtr ptrNative = IntPtr.Zero;
@@ -382,6 +395,15 @@ namespace xuexue.DNET
         /// <returns></returns>
         [DllImport(DllName, EntryPoint = "dnClientConnect", CallingConvention = CallingConvention.StdCall)]
         internal static extern DNetError Connect(IntPtr client, string host, int port);
+
+
+        /// <summary>
+        /// 客户端是否已经连接上了服务器.
+        /// </summary>
+        /// <param name="server"></param>
+        /// <returns></returns>
+        [DllImport(DllName, EntryPoint = "dnClientIsAccepted", CallingConvention = CallingConvention.StdCall)]
+        internal static extern DNetError IsAccepted(IntPtr client, out bool isAccepted);
 
         /// <summary>
         /// 客户端关闭.
