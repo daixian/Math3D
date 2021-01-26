@@ -53,7 +53,7 @@ namespace xuexue.json
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
                 //这里懒得写Json文本的转换方法了,所以借助了TVector2这个类型
-                var obj = (Vector3)value;
+                var obj = (Vector2)value;
                 TVector2 tobj = new TVector2() { x = obj.x, y = obj.y };
                 serializer.Serialize(writer, tobj);
             }
@@ -61,7 +61,7 @@ namespace xuexue.json
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
                 TVector2 tObj = serializer.Deserialize<TVector2>(reader);
-                return new Vector3(tObj.x, tObj.y);
+                return new Vector2(tObj.x, tObj.y);
             }
 
             public override bool CanConvert(Type objectType)
