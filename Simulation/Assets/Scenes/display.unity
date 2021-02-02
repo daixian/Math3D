@@ -172,7 +172,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 100
-  field of view: 70
+  field of view: 64
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a83da5d54c4035943ad7c964f051d242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonPath: '"D:\Work\ImageCapture\build\bin\images\F3DSC02-640x400-calib_scene.json"'
+  jsonPath: D:\Work\ImageCapture\build\bin\images\DualStereoCalibCheck_F3DSC021-L_scene.json
 --- !u!4 &961043832
 Transform:
   m_ObjectHideFlags: 0

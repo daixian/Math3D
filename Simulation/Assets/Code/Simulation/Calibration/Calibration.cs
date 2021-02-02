@@ -34,9 +34,7 @@ public class Calibration : MonoBehaviour
         //CameraData cdata = new CameraData();
         //cdata.worldToCameraMatrix = cam1.worldToCameraMatrix;
         //cdata.projectionMatrix = cam1.projectionMatrix;
-
-
-        Debug.Log(JsonMapper.ToJson(cam1));
+        //Debug.Log(JsonMapper.ToJson(cam1));
     }
 
     // Update is called once per frame
@@ -54,7 +52,7 @@ public class Calibration : MonoBehaviour
             if (!Directory.Exists(cam2.name))
                 Directory.CreateDirectory(cam2.name);
 
-            Debug.Log(JsonMapper.ToJson(cam1));
+            //Debug.Log(JsonMapper.ToJson(cam1));
             CaptrueCamera(cam1, new Rect(0, 0, 1920, 1080), cam1.name + "\\" + count);
             CaptrueCamera(cam2, new Rect(0, 0, 1920, 1080), cam2.name + "\\" + count);
             count++;
