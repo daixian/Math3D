@@ -21,6 +21,9 @@ namespace dxlib
         /// </summary>
         private List<GameObject> _listObj = new List<GameObject>();
 
+        //材质的缓存
+        public Dictionary<Color32, Material> dictMat = new Dictionary<Color32, Material>();
+
 
         void Awake()
         {
@@ -94,6 +97,7 @@ namespace dxlib
             if (co.type > 0 || !string.IsNullOrEmpty(co.prefabName))//如果它不是一个空物体
             {
                 GameObject pref = Resources.Load<GameObject>(co.prefabName);
+
                 if (pref != null)//如果支持资源里面有这个物体
                 {
                     go = GameObject.Instantiate(pref);
@@ -148,13 +152,24 @@ namespace dxlib
                 Renderer rnd = go.GetComponentInChildren<Renderer>();
                 if (rnd != null)
                 {
-                    rnd.material.color = co.color;
+                    if (!dictMat.ContainsKey(co.color))
+                    {
+                        dictMat[co.color] = new Material(rnd.material);
+                        dictMat[co.color].color = co.color;
+                        Debug.Log($"增加一个材质,当前材质个数{dictMat.Count}");
+                    }
+                    rnd.material = dictMat[co.color];
                 }
             }
             go.SetActive(co.isActive);
             _listObj.Add(go);//记录这个添加的物体
         }
 
+        /// <summary>
+        /// 目前只有画线组件
+        /// </summary>
+        /// <param name="com"></param>
+        /// <param name="go"></param>
         private void AddComponentWithJsonObj(cvComponent com, GameObject go)
         {
             if (com.GetType() == typeof(cvLine))
