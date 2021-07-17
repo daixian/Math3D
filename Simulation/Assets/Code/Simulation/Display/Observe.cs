@@ -147,7 +147,8 @@ namespace dxlib
             }
 
             //当这个物体有模型的时候，尝试给颜色赋值，寻找子物体下面的组件
-            if (!string.IsNullOrEmpty(co.prefabName) || co.type != 0)
+            if ((!string.IsNullOrEmpty(co.prefabName) || co.type != 0) &&
+                co.isColor)//如果规定了不使用颜色,那么就不要进下面的处理
             {
                 Renderer rnd = go.GetComponentInChildren<Renderer>();
                 if (rnd != null)
