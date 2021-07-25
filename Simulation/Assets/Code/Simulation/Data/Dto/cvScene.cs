@@ -60,12 +60,15 @@ namespace DTO
         public Vector3 localScale;
 
         /// <summary> 这个物体是否在u3d里默认是显示的. </summary>
-        public bool isActive = true;
+        [JsonProperty(PropertyName = "isActive")]
+        public bool isActive = false;
 
         /// <summary> 上面的坐标旋转是否是本地坐标 <summary>
+        [JsonProperty(PropertyName = "isLocal")]
         public bool isLocal = false;
 
         /// <summary> 是否覆盖预制体材质 </summary>
+        [JsonProperty(PropertyName = "isColor")]
         public bool isColor = true;
 
         /// <summary> 所有包含的组件. </summary>

@@ -66,10 +66,10 @@ namespace dxlib
 
             if (!File.Exists(path))
             {
-                Debug.Log("Observe.LoadFile():文件不存在. " + path);
+                Debug.LogError("Observe.LoadFile():文件不存在. " + path);
                 return;//如果文件不存在就直接返回
             }
-
+            Debug.Log($"Observe.LoadFile():载入文件 {path}");
             Config.Inst.AddHistory(path);
 
             Clear();
@@ -93,6 +93,11 @@ namespace dxlib
         /// <param name="parent"></param>
         private void AddCvObj(cvObject co, GameObject parent = null)
         {
+            //如果是隐藏那么就不显示了
+            //if (!co.isActive)
+            //{
+            //    return;
+            //}
             GameObject go;
             if (co.type > 0 || !string.IsNullOrEmpty(co.prefabName))//如果它不是一个空物体
             {
@@ -157,7 +162,7 @@ namespace dxlib
                     {
                         dictMat[co.color] = new Material(rnd.material);
                         dictMat[co.color].color = co.color;
-                        Debug.Log($"增加一个材质,当前材质个数{dictMat.Count}");
+                        //Debug.Log($"增加一个材质,当前材质个数{dictMat.Count}");
                     }
                     rnd.material = dictMat[co.color];
                 }
