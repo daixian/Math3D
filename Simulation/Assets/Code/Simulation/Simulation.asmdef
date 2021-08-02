@@ -7,7 +7,11 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "Newtonsoft.Json.dll",
-        "xuexue.utility.dll"
+        "xuexue.utility.dll",
+        "Flurl.Http.dll",
+        "Flurl.dll",
+        "DOTween.dll",
+        "AutoMapper.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

@@ -1,4 +1,5 @@
 ﻿using DTO;
+using Flurl.Http;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +25,10 @@ namespace dxlib
         //材质的缓存
         public Dictionary<Color32, Material> dictMat = new Dictionary<Color32, Material>();
 
+        /// <summary>
+        /// 是否通过网络更新
+        /// </summary>
+        public bool isUpdateWithNet = false;
 
         void Awake()
         {
@@ -47,6 +52,12 @@ namespace dxlib
         void Update()
         {
 
+        }
+
+        private void FixedUpdate()
+        {
+            if (isUpdateWithNet)
+                UpdateSceneWithNet();
         }
 
         void OnApplicationQuit()
@@ -85,6 +96,49 @@ namespace dxlib
                 this.AddCvObj(scene.objects[i]);
             }
         }
+
+        /// <summary>
+        /// 载入一个场景
+        /// </summary>
+        /// <param name="scene"></param>
+        public void LoadScene(cvScene scene)
+        {
+            if (scene == null || scene.objects == null)
+            {
+                Debug.LogWarning("Observe.LoadFile():Json反序列化失败,场景对象为null!");
+                return;
+            }
+            for (int i = 0; i < scene.objects.Count; i++)
+            {
+                this.AddCvObj(scene.objects[i]);
+            }
+        }
+
+        /// <summary>
+        /// 联网获得调试场景的url
+        /// </summary>
+        string url = "http://127.0.0.1:42015/debug/scene";
+
+        /// <summary>
+        /// 从网络更新场景
+        /// </summary>
+        async void UpdateSceneWithNet()
+        {
+            try
+            {
+                var msg = await url.GetStringAsync();
+                cvScene scene = JsonConvert.DeserializeObject<cvScene>(msg);
+                LoadScene(scene);
+            }
+            catch (System.Exception)
+            {
+                //这里是通信失败
+            }
+
+        }
+
+
+
 
         /// <summary>
         /// 添加一个cv物体到场景里

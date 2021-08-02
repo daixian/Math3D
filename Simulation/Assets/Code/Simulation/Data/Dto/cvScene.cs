@@ -80,7 +80,12 @@ namespace DTO
 
     [JsonObject(MemberSerialization.Fields)]
     public class cvScene
-    {
+    {    // 场景信息
+        public string info;
+
+        // 场景的标记戳
+        public string stamp;
+
         public List<cvObject> objects = new List<cvObject>();
     }
 
