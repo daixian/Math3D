@@ -45,7 +45,8 @@ namespace dxlib
             {
                 jsonPath = Config.Inst.lastJsonScene;
             }
-            LoadFile(jsonPath);
+            if (!isUpdateWithNet)
+                LoadFile(jsonPath);
         }
 
         // Update is called once per frame
@@ -56,12 +57,15 @@ namespace dxlib
 
         private void FixedUpdate()
         {
-            if (isUpdateWithNet)
-                UpdateSceneWithNet();
+            //if (isUpdateWithNet)
+            //{
+            //    UpdateSceneWithNet();
+            //}
         }
 
         void OnApplicationQuit()
         {
+            Clear();
             Config.Inst.Save();
         }
 
@@ -108,6 +112,7 @@ namespace dxlib
                 Debug.LogWarning("Observe.LoadFile():Json反序列化失败,场景对象为null!");
                 return;
             }
+            Clear();
             for (int i = 0; i < scene.objects.Count; i++)
             {
                 this.AddCvObj(scene.objects[i]);
@@ -122,7 +127,7 @@ namespace dxlib
         /// <summary>
         /// 从网络更新场景
         /// </summary>
-        async void UpdateSceneWithNet()
+        public async void UpdateSceneWithNet()
         {
             try
             {
@@ -136,9 +141,6 @@ namespace dxlib
             }
 
         }
-
-
-
 
         /// <summary>
         /// 添加一个cv物体到场景里

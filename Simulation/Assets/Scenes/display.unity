@@ -235,6 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jsonPath: '"C:\Work\ImageCapture\build\bin\images\StereoSystemCheck.json"'
+  isUpdateWithNet: 1
 --- !u!4 &961043832
 Transform:
   m_ObjectHideFlags: 0

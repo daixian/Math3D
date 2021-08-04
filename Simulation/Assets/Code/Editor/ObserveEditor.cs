@@ -26,6 +26,10 @@ namespace dxlib
             {
                 myScript.LoadFile(myScript.jsonPath);
             }
+            if (GUILayout.Button("更新Net场景"))
+            {
+                myScript.UpdateSceneWithNet();
+            }
 
             //显示10条历史记录
             string[] history = Config.Inst.GetHistory();
