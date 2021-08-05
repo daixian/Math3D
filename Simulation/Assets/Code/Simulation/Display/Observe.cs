@@ -30,6 +30,11 @@ namespace dxlib
         /// </summary>
         public bool isUpdateWithNet = false;
 
+        /// <summary>
+        /// 当前的场景
+        /// </summary>
+        public cvScene curScene;
+
         void Awake()
         {
             xuexue.json.U3DJsonSetting.SetDefault();
@@ -57,10 +62,10 @@ namespace dxlib
 
         private void FixedUpdate()
         {
-            //if (isUpdateWithNet)
-            //{
-            //    UpdateSceneWithNet();
-            //}
+            if (isUpdateWithNet)
+            {
+                UpdateSceneWithNet();
+            }
         }
 
         void OnApplicationQuit()
@@ -132,8 +137,14 @@ namespace dxlib
             try
             {
                 var msg = await url.GetStringAsync();
+                if (!this.isActiveAndEnabled)//使用这个在await之后进行判断
+                    return;
                 cvScene scene = JsonConvert.DeserializeObject<cvScene>(msg);
-                LoadScene(scene);
+                if (curScene == null || curScene.stamp != scene.stamp)
+                {
+                    curScene = scene;
+                    LoadScene(scene);
+                }
             }
             catch (System.Exception)
             {
