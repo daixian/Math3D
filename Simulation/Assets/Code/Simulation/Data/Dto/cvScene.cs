@@ -99,7 +99,7 @@ namespace DTO
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var obj = (cvComponent)value;
-            if (obj.type == "cvLine")
+            if (obj.type == "cvLine" || obj.type == "Line")//目前有两个版本的代码一个用的是cvLine,一个用的是Line
             {
                 cvLine line = (cvLine)value;
                 serializer.Serialize(writer, line);
@@ -112,7 +112,7 @@ namespace DTO
             if (jo.ContainsKey("type"))
             {
                 string t = (string)jo["type"];
-                if (t == "cvLine")
+                if (t == "cvLine" || t == "Line")//目前有两个版本的代码一个用的是cvLine,一个用的是Line
                 {
                     return jo.ToObject<cvLine>();
                 }
