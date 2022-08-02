@@ -108,6 +108,8 @@ namespace dxlib
 
         /// <summary>
         /// 载入一个场景
+        /// TODO:这个函数没有物体池的话,持续的创建和销毁物体会导致帧率下降.
+        /// 进行了如下实验:读取了3个时间的json场景,然后不再进行网络活动,只不停的创建这3个场景,则帧率也会越来越低.
         /// </summary>
         /// <param name="scene"></param>
         public void LoadScene(cvScene scene)
