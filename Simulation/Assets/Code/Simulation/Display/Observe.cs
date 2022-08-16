@@ -20,7 +20,7 @@ namespace dxlib
         /// <summary>
         /// 所有物体的列表
         /// </summary>
-        private List<GameObject> _listObj = new List<GameObject>();
+        private List<ObjectCache> _listObj = new List<ObjectCache>();
 
         //材质的缓存
         public Dictionary<Color32, Material> dictMat = new Dictionary<Color32, Material>();
@@ -119,11 +119,15 @@ namespace dxlib
                 Debug.LogWarning("Observe.LoadFile():Json反序列化失败,场景对象为null!");
                 return;
             }
-            Clear();
+            //Clear();
+            ClearComponentAndTagUpdated();
+
             for (int i = 0; i < scene.objects.Count; i++)
             {
                 this.AddCvObj(scene.objects[i]);
             }
+
+            SetHideObject();
         }
 
         /// <summary>
@@ -167,26 +171,42 @@ namespace dxlib
             //{
             //    return;
             //}
-            GameObject go;
-            if (co.type > 0 || !string.IsNullOrEmpty(co.prefabName))//如果它不是一个空物体
+            GameObject go = null;
+            foreach (var cache in _listObj)
             {
-                GameObject pref = Resources.Load<GameObject>(co.prefabName);
+                if (cache.gameObject.name == co.name)
+                { //如果名字相同,那么可以认为它是同一个物体
+                    go = cache.gameObject;
+                    cache.updated = true;
 
-                if (pref != null)//如果支持资源里面有这个物体
+                }
+            }
+
+            if (go == null)
+            {
+                //如果没有找到这个相同名字的物体,那么就创建
+                if (co.type > 0 || !string.IsNullOrEmpty(co.prefabName))//如果它不是一个空物体
                 {
-                    go = GameObject.Instantiate(pref);
+                    GameObject pref = Resources.Load<GameObject>(co.prefabName);
+
+                    if (pref != null)//如果支持资源里面有这个物体
+                    {
+                        go = GameObject.Instantiate(pref);
+                    }
+                    else
+                    {
+                        go = new GameObject();
+                    }
                 }
                 else
                 {
                     go = new GameObject();
                 }
-            }
-            else
-            {
-                go = new GameObject();
+                go.name = co.name;
+                ObjectCache ocache = new ObjectCache() { gameObject = go, updated = true };
+                _listObj.Add(ocache);//记录这个添加的物体
             }
 
-            go.name = co.name;
             if (parent != null)
                 go.transform.parent = parent.transform;
 
@@ -237,7 +257,6 @@ namespace dxlib
                 }
             }
             go.SetActive(co.isActive);
-            _listObj.Add(go);//记录这个添加的物体
         }
 
         /// <summary>
@@ -251,7 +270,9 @@ namespace dxlib
             {
                 cvLine cl = com as cvLine;
 
-                LineRenderer lr = go.AddComponent<LineRenderer>();
+                LineRenderer lr = go.GetComponent<LineRenderer>();
+                if (lr == null)
+                    go.AddComponent<LineRenderer>();
                 lr.startWidth = 0.001f;
                 lr.endWidth = 0.001f;
                 lr.positionCount = 2;
@@ -269,10 +290,38 @@ namespace dxlib
         {
             foreach (var item in _listObj)
             {
-                Destroy(item);
+                Destroy(item.gameObject);
+            }
+            _listObj.Clear();
+        }
+
+
+        void ClearComponentAndTagUpdated()
+        {
+            foreach (var item in _listObj)
+            {
+                //标记它没有更新,如果后面仍然没有被更新就会被隐藏
+                item.updated = false;
+            }
+        }
+
+        /// <summary>
+        /// 暂时隐藏所有的物体
+        /// </summary>
+        private void SetHideObject()
+        {
+            foreach (var item in _listObj)
+            {
+                if (!item.updated)
+                {
+                    //如果没有被更新过就隐藏
+                    item.gameObject.SetActive(false);
+                }
+
             }
 
         }
+
 
         #endregion
     }

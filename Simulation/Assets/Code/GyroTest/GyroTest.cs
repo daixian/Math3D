@@ -41,8 +41,12 @@ public class GyroTest : MonoBehaviour
         //查看验证temp=trsA1
         Matrix4x4 temp = trsA0 * T;
 
-        UT0.position = temp.GetPosition();
-        UT0.rotation = temp.rotation;
+        //UT0.position = temp.GetPosition();
+        //UT0.rotation = temp.rotation;
+
+        Quaternion rot = Quaternion.AngleAxis(90, new Vector3(0, 1, 0));
+        UT0.rotation = rot;
+        Debug.Log(UT0.rotation.ToString());
 
         Debug.Log(temp.ToString());
 
