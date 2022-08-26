@@ -57,15 +57,15 @@ namespace dxlib
         // Update is called once per frame
         void Update()
         {
-
-        }
-
-        private void FixedUpdate()
-        {
             if (isUpdateWithNet)
             {
                 UpdateSceneWithNet();
             }
+        }
+
+        private void FixedUpdate()
+        {
+
         }
 
         void OnApplicationQuit()
@@ -276,8 +276,8 @@ namespace dxlib
                 lr.startWidth = 0.001f;
                 lr.endWidth = 0.001f;
                 lr.positionCount = 2;
-                if (lr.material == null)
-                    lr.material = Resources.Load<Material>("linemat");
+                //if (lr.material == null)
+                lr.material = Resources.Load<Material>("linemat");
                 lr.material.color = cl.color;
                 lr.SetPositions(new Vector3[] { cl.pos0, cl.pos1 });
             }
