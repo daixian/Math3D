@@ -34,6 +34,15 @@ public class ShowFPS : MonoBehaviour
             case 2:
                 vSync = " Sync 30";
                 break;
+            case 3:
+                vSync = " Sync 20";
+                break;
+            case 4:
+                vSync = " Sync 15";
+                break;
+            default:
+                vSync = $"vSyncCount={QualitySettings.vSyncCount}";
+                break;
         }
 
         string[] names = QualitySettings.names;

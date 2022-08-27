@@ -40,7 +40,8 @@ namespace dxlib
             xuexue.json.U3DJsonSetting.SetDefault();
 
             Config.Inst.Load();
-            QualitySettings.vSyncCount = 4;//设置垂直同步来减少cpu占用
+            //设置垂直同步来减少cpu占用,这里不要乱设置成非1的值,如果设置成4帧率锁15帧
+            //QualitySettings.vSyncCount = 1;
         }
 
         // Use this for initialization
