@@ -175,11 +175,13 @@ namespace dxlib
             GameObject go = null;
             foreach (var cache in _listObj)
             {
-                if (cache.gameObject.name == co.name)
-                { //如果名字相同,那么可以认为它是同一个物体
+                if (cache.updated == false && cache.Match(co.name))
+                {
+                    cache.name = co.name;
                     go = cache.gameObject;
+                    go.name = co.name;
                     cache.updated = true;
-
+                    break;
                 }
             }
 
@@ -204,7 +206,7 @@ namespace dxlib
                     go = new GameObject();
                 }
                 go.name = co.name;
-                ObjectCache ocache = new ObjectCache() { gameObject = go, updated = true };
+                ObjectCache ocache = new ObjectCache() { name = co.name, gameObject = go, updated = true };
                 _listObj.Add(ocache);//记录这个添加的物体
             }
 
@@ -269,6 +271,7 @@ namespace dxlib
         {
             if (com.GetType() == typeof(cvLine))
             {
+                go.SetActive(false);//这一步必须的隐藏物体,否则会有线的材质错误.
                 cvLine cl = com as cvLine;
 
                 LineRenderer lr = go.GetComponent<LineRenderer>();
@@ -277,12 +280,13 @@ namespace dxlib
                 lr.startWidth = 0.001f;
                 lr.endWidth = 0.001f;
                 lr.positionCount = 2;
+                lr.SetPositions(new Vector3[] { cl.pos0, cl.pos1 });
                 //if (lr.material == null)
                 lr.material = Resources.Load<Material>("linemat");
                 lr.material.color = cl.color;
-                lr.SetPositions(new Vector3[] { cl.pos0, cl.pos1 });
-            }
 
+                go.SetActive(true);//这里打开就行了
+            }
         }
 
         /// <summary>
