@@ -137,25 +137,37 @@ namespace dxlib
         string url = "http://127.0.0.1:42015/debug/scene";
 
         /// <summary>
+        /// 是否一次网络通信工作已经完成了,用于防止重复await.
+        /// </summary>
+        bool OnceNetWorkDone = true;
+
+        /// <summary>
         /// 从网络更新场景
         /// </summary>
         public async void UpdateSceneWithNet()
         {
-            try
+            //防止重复无意义的GetStringAsync()工作.
+            if (OnceNetWorkDone)
             {
-                var msg = await url.GetStringAsync();
-                if (!this.isActiveAndEnabled)//使用这个在await之后进行判断
-                    return;
-                cvScene scene = JsonConvert.DeserializeObject<cvScene>(msg);
-                if (curScene == null || curScene.stamp != scene.stamp)
+                try
                 {
-                    curScene = scene;
-                    LoadScene(scene);
+                    OnceNetWorkDone = false;//标记开始网络工作
+                    var msg = await url.GetStringAsync();
+                    if (!this.isActiveAndEnabled)//使用这个在await之后进行判断
+                        return;
+                    cvScene scene = JsonConvert.DeserializeObject<cvScene>(msg);
+                    if (curScene == null || curScene.stamp != scene.stamp)
+                    {
+                        curScene = scene;
+                        LoadScene(scene);
+                    }
                 }
-            }
-            catch (System.Exception)
-            {
-                //这里是通信失败
+                catch (System.Exception e)
+                {
+                    Debug.Log($"异常:{e.Message}");
+                    //这里是通信失败
+                }
+                OnceNetWorkDone = true; //标记网络工作完成
             }
 
         }
@@ -271,21 +283,22 @@ namespace dxlib
         {
             if (com.GetType() == typeof(cvLine))
             {
-                go.SetActive(false);//这一步必须的隐藏物体,否则会有线的材质错误.
+                //go.SetActive(false);//这一步如果隐藏物体,那么下面的代码异常之后场景中会看不见
                 cvLine cl = com as cvLine;
 
                 LineRenderer lr = go.GetComponent<LineRenderer>();
                 if (lr == null)
-                    go.AddComponent<LineRenderer>();
+                {
+                    lr = go.AddComponent<LineRenderer>();
+                    lr.material = Resources.Load<Material>("linemat");
+                }
                 lr.startWidth = 0.001f;
                 lr.endWidth = 0.001f;
                 lr.positionCount = 2;
                 lr.SetPositions(new Vector3[] { cl.pos0, cl.pos1 });
-                //if (lr.material == null)
-                lr.material = Resources.Load<Material>("linemat");
                 lr.material.color = cl.color;
 
-                go.SetActive(true);//这里打开就行了
+                //go.SetActive(true);//这里打开就行了
             }
         }
 
