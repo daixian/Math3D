@@ -40,6 +40,10 @@ namespace dxlib
         [JsonProperty]
         public string lastJsonScene;
 
+
+        [JsonProperty]
+        public string remote = "127.0.0.1";
+
         #endregion
 
         #region 载入保存配置文件
@@ -58,8 +62,7 @@ namespace dxlib
         /// </summary>
         public void Load(string path = "./config.json")
         {
-            if (!File.Exists(path))
-            {
+            if (!File.Exists(path)) {
                 return;
             }
             string text = File.ReadAllText(path);
@@ -80,8 +83,7 @@ namespace dxlib
             if (!listJsonSceneHistory.Contains(fi.FullName))//只有路径不一样了才记录
             {
                 listJsonSceneHistory.Add(filePath);
-                if (listJsonSceneHistory.Count > 10)
-                {
+                if (listJsonSceneHistory.Count > 10) {
                     listJsonSceneHistory.RemoveAt(0);
                 }
             }

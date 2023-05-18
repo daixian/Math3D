@@ -45,6 +45,7 @@ namespace dxlib
             xuexue.json.U3DJsonSetting.SetDefault();
 
             Config.Inst.Load();
+            remoteIP = Config.Inst.remote;
             //设置垂直同步来减少cpu占用,这里不要乱设置成非1的值,如果设置成4帧率锁15帧
             //QualitySettings.vSyncCount = 1;
         }
@@ -75,6 +76,7 @@ namespace dxlib
         void OnApplicationQuit()
         {
             Clear();
+            Config.Inst.remote = remoteIP;
             Config.Inst.Save();
         }
 
