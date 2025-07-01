@@ -40,6 +40,9 @@ namespace dxlib
         /// </summary>
         public string remoteIP = "10.2.18.124";
 
+        [Tooltip("是否绘制射线")]
+        public bool enableLine = true;
+
         void Awake()
         {
             xuexue.json.U3DJsonSetting.SetDefault();
@@ -70,7 +73,6 @@ namespace dxlib
 
         private void FixedUpdate()
         {
-
         }
 
         void OnApplicationQuit()
@@ -92,7 +94,7 @@ namespace dxlib
 
             if (!File.Exists(path)) {
                 Debug.LogError("Observe.LoadFile():文件不存在. " + path);
-                return;//如果文件不存在就直接返回
+                return; //如果文件不存在就直接返回
             }
             Debug.Log($"Observe.LoadFile():载入文件 {path}");
             Config.Inst.AddHistory(path);
@@ -147,23 +149,21 @@ namespace dxlib
             // 防止重复无意义的GetStringAsync()工作.
             if (OnceNetWorkDone) {
                 try {
-                    OnceNetWorkDone = false;//标记开始网络工作
+                    OnceNetWorkDone = false; //标记开始网络工作
                     var msg = await url.GetStringAsync();
-                    if (!this.isActiveAndEnabled)//使用这个在await之后进行判断
+                    if (!this.isActiveAndEnabled) //使用这个在await之后进行判断
                         return;
                     cvScene scene = JsonConvert.DeserializeObject<cvScene>(msg);
                     if (curScene == null || curScene.stamp != scene.stamp) {
                         curScene = scene;
                         LoadScene(scene);
                     }
-                }
-                catch (System.Exception e) {
+                } catch (System.Exception e) {
                     Debug.Log($"异常:{e.Message}");
                     //这里是通信失败
                 }
                 OnceNetWorkDone = true; //标记网络工作完成
             }
-
         }
 
         /// <summary>
@@ -191,11 +191,11 @@ namespace dxlib
 
             if (go == null) {
                 //如果没有找到这个相同名字的物体,那么就创建
-                if (co.type > 0 || !string.IsNullOrEmpty(co.prefabName))//如果它不是一个空物体
+                if (co.type > 0 || !string.IsNullOrEmpty(co.prefabName)) //如果它不是一个空物体
                 {
                     GameObject pref = Resources.Load<GameObject>(co.prefabName);
 
-                    if (pref != null)//如果支持资源里面有这个物体
+                    if (pref != null) //如果支持资源里面有这个物体
                     {
                         go = GameObject.Instantiate(pref);
                     }
@@ -208,13 +208,13 @@ namespace dxlib
                 }
                 go.name = co.name;
                 ObjectCache ocache = new ObjectCache() { name = co.name, gameObject = go, updated = true };
-                _listObj.Add(ocache);//记录这个添加的物体
+                _listObj.Add(ocache); //记录这个添加的物体
             }
 
             if (parent != null)
                 go.transform.parent = parent.transform;
 
-            if (co.isLocal)//json里的坐标是否是本地坐标
+            if (co.isLocal) //json里的坐标是否是本地坐标
             {
                 go.transform.localPosition = co.position;
                 go.transform.localRotation = co.rotation;
@@ -235,13 +235,13 @@ namespace dxlib
             //设置好自己的坐标之后在安排自己的子物体们
             if (co.children != null) {
                 for (int i = 0; i < co.children.Count; i++) {
-                    AddCvObj(co.children[i], go);//递归一下
+                    AddCvObj(co.children[i], go); //递归一下
                 }
             }
 
             //当这个物体有模型的时候，尝试给颜色赋值，寻找子物体下面的组件
             if ((!string.IsNullOrEmpty(co.prefabName) || co.type != 0) &&
-                co.isColor)//如果规定了不使用颜色,那么就不要进下面的处理
+                co.isColor) //如果规定了不使用颜色,那么就不要进下面的处理
             {
                 Renderer rnd = go.GetComponentInChildren<Renderer>();
                 if (rnd != null) {
@@ -263,7 +263,8 @@ namespace dxlib
         /// <param name="go"></param>
         private void AddComponentWithJsonObj(cvComponent com, GameObject go)
         {
-            if (com.GetType() == typeof(cvLine)) {
+            // 如果组件的类型是画线
+            if (enableLine && com.GetType() == typeof(cvLine)) {
                 //go.SetActive(false);//这一步如果隐藏物体,那么下面的代码异常之后场景中会看不见
                 cvLine cl = com as cvLine;
 
@@ -312,11 +313,8 @@ namespace dxlib
                     //如果没有被更新过就隐藏
                     item.gameObject.SetActive(false);
                 }
-
             }
-
         }
-
 
         #endregion
     }
