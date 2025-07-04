@@ -6,28 +6,34 @@ EditorUserSettings:
   serializedVersion: 4
   m_ConfigSettings:
     RecentlyUsedSceneGuid-0:
-      value: 560703020700080d08580d2743205a44124e1e737e7c7732757c4e65e0e1673d
-      flags: 0
-    RecentlyUsedSceneGuid-1:
-      value: 5454045303065f090e590a7b40760e44464e497a782d22322e284537b2e1306e
-      flags: 0
-    RecentlyUsedSceneGuid-2:
       value: 0203035e5d045d030b565e21427306441315407f7c7f7f682c7b4835e6b73039
       flags: 0
-    RecentlyUsedSceneGuid-3:
-      value: 0106065357500b0e5a5e087049760b44444e4a282d7e75637b7f4b6bb4e36c6f
-      flags: 0
-    RecentlyUsedSceneGuid-4:
+    RecentlyUsedSceneGuid-1:
       value: 51540d5053065d03585d0d7542225a4410154078297e24657f784c66b6e36d6c
       flags: 0
-    RecentlyUsedSceneGuid-5:
-      value: 0754055507005f0c5957587043750744434f4a2c2e7073627d2a4d67b0b73669
-      flags: 0
-    RecentlyUsedSceneGuid-6:
+    RecentlyUsedSceneGuid-2:
       value: 070602575c075a0d5f5a5c201520064444161d78797a7f3628711931bbb5303b
       flags: 0
-    RecentlyUsedSceneGuid-7:
+    RecentlyUsedSceneGuid-3:
+      value: 0754055507005f0c5957587043750744434f4a2c2e7073627d2a4d67b0b73669
+      flags: 0
+    RecentlyUsedSceneGuid-4:
+      value: 000903035554595d5c58087213210944134f4d78787c22647e2b4f64e4b36569
+      flags: 0
+    RecentlyUsedSceneGuid-5:
       value: 0006515555015c0f5a0f5d7211710e44454e40727d717768742c1c61b5b5623c
+      flags: 0
+    RecentlyUsedSceneGuid-6:
+      value: 560703020700080d08580d2743205a44124e1e737e7c7732757c4e65e0e1673d
+      flags: 0
+    RecentlyUsedSceneGuid-7:
+      value: 0106065357500b0e5a5e087049760b44444e4a282d7e75637b7f4b6bb4e36c6f
+      flags: 0
+    RecentlyUsedSceneGuid-8:
+      value: 5703025e570451595d0b5470417a5944454e4d2f7b2e2234287f4832bbe3313e
+      flags: 0
+    RecentlyUsedSceneGuid-9:
+      value: 5207505e06020859595f5c7146760d44174f4179747a7e667a2d4d35b5e56d3d
       flags: 0
     lightmappingBakingProfile:
       value: 51
@@ -49,5 +55,6 @@ EditorUserSettings:
   m_VCHierarchyOverlayIcons: 1
   m_VCOtherOverlayIcons: 1
   m_VCAllowAsyncUpdate: 1
+  m_VCScanLocalPackagesOnConnect: 1
   m_ArtifactGarbageCollection: 1
   m_CompressAssetsOnImport: 1
