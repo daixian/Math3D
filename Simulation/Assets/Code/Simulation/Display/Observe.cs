@@ -276,6 +276,7 @@ namespace dxlib
                 lr.startWidth = 0.001f;
                 lr.endWidth = 0.001f;
                 lr.positionCount = 2;
+                lr.useWorldSpace = cl.useWorldSpace;
                 lr.SetPositions(new Vector3[] { cl.pos0, cl.pos1 });
                 lr.material.color = cl.color;
 

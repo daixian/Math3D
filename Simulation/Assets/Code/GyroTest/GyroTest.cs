@@ -6,19 +6,19 @@ using UnityEngine;
 
 public class GyroTest : MonoBehaviour
 {
-    //Ô­Ê¼Ö¡µÄÍÓÂİÒÇĞı×ª
+    //åŸå§‹å¸§çš„é™€èºä»ªæ—‹è½¬
     public Transform A0;
 
-    //µ±Ç°µÄÍÓÂİÒÇĞı×ª
+    //å½“å‰çš„é™€èºä»ªæ—‹è½¬
     public Transform A1;
 
 
     public Transform UT0;
 
-    //Ô­Ê¼µÄ¹âÑ§Î»ÖÃ
+    //åŸå§‹çš„å…‰å­¦ä½ç½®
     public Transform B0;
 
-    //ÒªÍÆËãµÄÏÖÔÚµÄ¹âÑ§Î»ÖÃ
+    //è¦æ¨ç®—çš„ç°åœ¨çš„å…‰å­¦ä½ç½®
     public Transform B1;
 
     Matrix4x4 T;
@@ -26,19 +26,19 @@ public class GyroTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Ä¿±ê,°ÑÒ»¸öUT0±ä»»µ½A1µÄÎ»ÖÃÈ¥
+        //ç›®æ ‡,æŠŠä¸€ä¸ªUT0å˜æ¢åˆ°A1çš„ä½ç½®å»
         Matrix4x4 trsA0 = Matrix4x4.TRS(A0.position, A0.rotation, Vector3.one);
         Matrix4x4 trsA1 = Matrix4x4.TRS(A1.position, A1.rotation, Vector3.one);
 
         Debug.Log(trsA1.ToString());
 
-        //Õâ¸öµÈÓÚÈç¹ûA0ÓĞÒ»¸ö×ÓÎïÌå,×ÓÎïÌåµÄÊÀ½çÎ»ÖÃÔÚA1µÄÎ»ÖÃÉÏ,T¾ÍÊÇÕâ¸ö×ÓÎïÌåµ½A0ÎïÌå¿Õ¼äµÄ±ä»»¾ØÕó
-        //ÕâÊÇÓÉtrsA1 = trsA0 * T ÍÆËãÀ´µÄ.
+        //è¿™ä¸ªç­‰äºå¦‚æœA0æœ‰ä¸€ä¸ªå­ç‰©ä½“,å­ç‰©ä½“çš„ä¸–ç•Œä½ç½®åœ¨A1çš„ä½ç½®ä¸Š,Tå°±æ˜¯è¿™ä¸ªå­ç‰©ä½“åˆ°A0ç‰©ä½“ç©ºé—´çš„å˜æ¢çŸ©é˜µ
+        //è¿™æ˜¯ç”±trsA1 = trsA0 * T æ¨ç®—æ¥çš„.
         T = trsA0.inverse * trsA1;
 
-        //¿¼ÂÇÍÓÂİÒÇµÄ×ÓÎïÌåµÄÏà¶Ô¹ØÏµºÍ¹âÑ§µÄ×ÓÎïÌå¹ØÏµÊÇÒ»ÖÂµÄ
+        //è€ƒè™‘é™€èºä»ªçš„å­ç‰©ä½“çš„ç›¸å¯¹å…³ç³»å’Œå…‰å­¦çš„å­ç‰©ä½“å…³ç³»æ˜¯ä¸€è‡´çš„
 
-        //²é¿´ÑéÖ¤temp=trsA1
+        //æŸ¥çœ‹éªŒè¯temp=trsA1
         Matrix4x4 temp = trsA0 * T;
 
         //UT0.position = temp.GetPosition();
@@ -67,6 +67,5 @@ public class GyroTest : MonoBehaviour
         Matrix4x4 trsB1 = trsB0 * trsA0.inverse * trsA1;
         B1.position = trsB1.GetPosition();
         B1.rotation = trsB1.rotation;
-
     }
 }

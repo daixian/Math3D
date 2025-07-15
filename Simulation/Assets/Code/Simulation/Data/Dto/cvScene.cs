@@ -33,6 +33,11 @@ namespace DTO
 
         /// <summary> 点1. </summary>
         public Vector3 pos1;
+
+        /// <summary>
+        /// 是否使用世界坐标
+        /// </summary>
+        public bool useWorldSpace;
     }
 
     [JsonObject(MemberSerialization.Fields)]
@@ -80,7 +85,8 @@ namespace DTO
 
     [JsonObject(MemberSerialization.Fields)]
     public class cvScene
-    {    // 场景信息
+    {
+        // 场景信息
         public string info;
 
         // 场景的标记戳
@@ -99,7 +105,7 @@ namespace DTO
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var obj = (cvComponent)value;
-            if (obj.type == "cvLine" || obj.type == "Line")//目前有两个版本的代码一个用的是cvLine,一个用的是Line
+            if (obj.type == "cvLine" || obj.type == "Line") //目前有两个版本的代码一个用的是cvLine,一个用的是Line
             {
                 cvLine line = (cvLine)value;
                 serializer.Serialize(writer, line);
@@ -109,10 +115,9 @@ namespace DTO
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject jo = JObject.Load(reader);
-            if (jo.ContainsKey("type"))
-            {
+            if (jo.ContainsKey("type")) {
                 string t = (string)jo["type"];
-                if (t == "cvLine" || t == "Line")//目前有两个版本的代码一个用的是cvLine,一个用的是Line
+                if (t == "cvLine" || t == "Line") //目前有两个版本的代码一个用的是cvLine,一个用的是Line
                 {
                     return jo.ToObject<cvLine>();
                 }
@@ -122,8 +127,7 @@ namespace DTO
 
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == typeof(cvComponent))
-            {
+            if (objectType == typeof(cvComponent)) {
                 return true;
             }
             return false;
